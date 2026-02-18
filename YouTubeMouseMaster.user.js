@@ -653,22 +653,8 @@
         const result = getTargetZone(e, e.currentTarget);
 
         if (!result) {
-            // [UX Feature] Shorts Navigation on non-zone scroll
-            if (isShorts) {
-                 if (e.target.closest('ytd-engagement-panel-section-list-renderer, ytd-comments, #comments')) return;
-                
-                 const now = Date.now();
-                 if (now - lastWheelTime < 250) return; 
-                 lastWheelTime = now;
-
-                 e.preventDefault();
-                 e.stopImmediatePropagation();
-                 
-                 const key = e.deltaY < 0 ? 'ArrowUp' : 'ArrowDown';
-                 triggerShortsNavigation(key);
-            }
-            // For normal videos, if no zone match, we intentionally do nothing (allow native scroll)
-            return;
+            // Prevent default ONLY if scrolling inside comments/engagement panel
+            if (isShorts && e.target.closest('ytd-engagement-panel-section-list-renderer, ytd-comments, #comments')) return;
         }
         
         const { zone, player: visualElement } = result;
@@ -751,10 +737,10 @@
     function checkAndBindPlayers() {
         // Find all potential players:
         // 1. #movie_player (Normal - old)
-        // 2. ytd-reel-video-renderer (Shorts Wrapper)
-        // 3. ytd-player (Normal Wrapper - Better capture)
-        // 4. .html5-video-player (Fallback)
-        const players = document.querySelectorAll('#movie_player, ytd-reel-video-renderer, ytd-player, .html5-video-player');
+        // 2. ytd-player (Normal Wrapper - Better capture)
+        // 3. .html5-video-player (Fallback)
+        const players = document.querySelectorAll('#movie_player, ytd-player, .html5-video-player');
+        console.log("🚀 ~ checkAndBindPlayers ~ players:", players)
         
         players.forEach(p => {
             if (!boundElements.has(p)) {
