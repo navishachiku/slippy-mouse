@@ -2,6 +2,11 @@
 
 All notable changes to the **YouTube Mouse Master** project will be documented in this file.
 
+## [0.6.0] - 2026-02-18
+
+### Fixed
+- **Shorts Scrolling**: Prevented video navigation from triggering when scrolling inside the comments section or engagement panels. 
+
 ## [0.5.0] - 2026-02-17
 
 ### Added

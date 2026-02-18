@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Mouse Master
 // @namespace    https://github.com/navishachiku/youtube-mouse-master
-// @version      0.5
+// @version      0.6
 // @description  High-performance YouTube player interaction script: support three-zone control, progress seek, prevent event penetration, high-frequency wheel filtering, and fix OSD timer conflicts.
 // @author       navishachiku & Gemini
 // @match        *://www.youtube.com/*
@@ -627,6 +627,9 @@
         if (!result) {
             // [UX Feature] Shorts Navigation on non-zone scroll
             if (isShorts) {
+                 // Avoid triggering navigation when scrolling in comments or other panels
+                 if (e.target.closest('ytd-engagement-panel-section-list-renderer, ytd-comments, #comments')) return;
+                
                  const now = Date.now();
                  // Debounce navigation actions to prevent skipping multiple videos at once
                  if (now - lastWheelTime < 250) return; 
