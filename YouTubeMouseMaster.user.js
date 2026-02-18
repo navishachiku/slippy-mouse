@@ -18,7 +18,7 @@
      */
     const SETTINGS = {
         DEBUG: false,                  // Whether to output debug messages to the console
-        ZONE_TOGGLE_KEY: 'F9',     // Hotkey to toggle zone visibility
+        ZONE_TOGGLE_KEY: 'F9',         // Hotkey to toggle zone visibility
 
         // OSD prompt settings
         OSD_DURATION: 800,             // Time OSD prompt stays on screen (ms)
@@ -93,7 +93,13 @@
     // State variables
     let lastWheelTime = 0;
     let wheelCount = 0;
+    
+    // Global player reference (API interface)
     let player = null;
+    
+    // Internal reference for the DOM element we are listening to
+    let activeBoundPlayer = null;
+
     let osdTimer = null;      // Timer for handling fade-out
     let osdHideTimer = null;  // Timer for handling display: none
     let isZonesVisible = false; // Controls visibility of the debug zones
@@ -157,7 +163,8 @@
                 display: 'none',
                 fontFamily: 'Roboto, Arial, sans-serif',
                 transition: `opacity ${SETTINGS.OSD_FADE_OUT / 1000}s ease`,
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                textShadow: '0 0 12px rgba(255, 255, 255, 0.5)' // Glow for emoji visibility
             });
             // Init in body, will be moved by showOSD
             document.body.appendChild(el);
@@ -490,76 +497,28 @@
     }
 
     /**
-     * Determine which interaction zone (if any) contains the mouse event.
-     * Handles complex logic for nested players, Shorts, and overlay exclusions.
-     * 
-     * @param {Event} e The mouse or wheel event.
-     * 
-     * @returns {{zone: Object, player: HTMLElement}|null} The target zone and associated player, or null.
-     */
-    function getTargetZone(e) {
-        const target = e.target;
-        
-        // Extended validSurface to include ytd-reel-video-renderer for Shorts
-        const validSurface = target.closest('.html5-main-video, .ytp-player-content, .html5-video-player, .ytp-iv-video-content, .ytp-upnext, #movie_player, ytd-reel-video-renderer');
-        
-        // Exclude native UI elements to prevent conflicts
-        // Added 'a' tag to allow link interactions (hashtags, channel names)
-        const isNativeUI = target.closest('.ytp-chrome-bottom, .ytp-settings-menu, .ytp-top-share-button, .ytp-ad-overlay-container, .ytp-playlist-menu, .ytp-miniplayer-ui, .ytp-miniplayer-scrim, .ytp-miniplayer-close-button, .ytp-miniplayer-expand-button, .ytp-button, button, a');
-
-        if (!validSurface || isNativeUI) return null;
-
-        // Dynamic player detection: priority to closest player, then Shorts renderer, then global fallback
-        let localPlayer = target.closest('.html5-video-player') || document.getElementById('movie_player');
-        
-        if (!localPlayer) {
-            const shortsRenderer = target.closest('ytd-reel-video-renderer');
-            if (shortsRenderer) {
-                localPlayer = shortsRenderer.querySelector('.html5-video-player');
-            }
-        }
-
-        if (!localPlayer) return null;
-
-        const rect = localPlayer.getBoundingClientRect();
-        const mouseX = (e.clientX - rect.left) / rect.width;
-        const mouseY = (e.clientY - rect.top) / rect.height;
-
-        if (mouseX < 0 || mouseX > 1 || mouseY < 0 || mouseY > 1) return null;
-
-        for (const zone of CONFIG) {
-            const zX = parseCoord(zone.offset.x, 1);
-            const zY = parseCoord(zone.offset.y, 1);
-            const zW = parseCoord(zone.size.width, 1);
-            const zH = parseCoord(zone.size.height, 1);
-
-            if (mouseX >= zX && mouseX <= (zX + zW) && mouseY >= zY && mouseY <= (zY + zH)) {
-                return { zone, player: localPlayer };
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Action Mapping Engine
+     * [Actions] Actions
+     * Implementation of specific interaction behaviors
      */
     const Actions = {
         volume_up: (val) => {
             if (typeof player.getVolume !== 'function') return;
             const next = Math.min(100, player.getVolume() + val);
             player.setVolume(next);
+            if (player.isMuted && player.isMuted()) player.unMute();
             showOSD(`🔊 ${next}%`);
         },
         volume_down: (val) => {
             if (typeof player.getVolume !== 'function') return;
             const next = Math.max(0, player.getVolume() - val);
             player.setVolume(next);
-            showOSD(`🔉 ${next}%`);
+            showOSD(`🔊 ${next}%`);
         },
         volume_set: (val) => {
             if (typeof player.setVolume !== 'function') return;
             player.setVolume(val);
-            showOSD(val === 0 ? ` Mute (0%)` : `🔊 ${val}%`);
+            if (player.isMuted && player.isMuted() && val > 0) player.unMute();
+            showOSD(val === 0 ? `🔊 Mute` : `🔊 ${val}%`);
         },
         seek: (delta) => {
             if (typeof player.getCurrentTime !== 'function' || typeof player.getDuration !== 'function') return;
@@ -572,8 +531,13 @@
         toggle_play_pause: () => {
             if (typeof player.getPlayerState !== 'function') return;
             const state = player.getPlayerState();
-            if (state === 1) player.pauseVideo();
-            else player.playVideo();
+            if (state === 1) {
+                player.pauseVideo();
+                showOSD('⏸️');
+            } else {
+                player.playVideo();
+                showOSD('▶️');
+            }
         },
         speed_up: (val) => {
             if (typeof player.getPlaybackRate !== 'function') return;
@@ -591,27 +555,91 @@
             if (typeof player.setPlaybackRate !== 'function') return;
             player.setPlaybackRate(val);
             showOSD(`🐾 ${val.toFixed(2)}x`);
-        }
+        },
+        none: () => {}
     };
 
-    // --- Event Handlers ---
+    // Registry to track which elements we've already bound to
+    const boundElements = new WeakSet();
 
     /**
-     * Dispatch synthetic key events for Shorts navigation.
+     * Determine which interaction zone (if any) contains the mouse event.
      * 
-     * @param {string} key The key to simulate ("ArrowUp" or "ArrowDown").
+     * @param {Event} e The mouse or wheel event.
+     * @param {HTMLElement} boundEl The element that triggered the listener (could be renderer or player).
+     * 
+     * @returns {{zone: Object, player: HTMLElement}|null} The target zone and associated player, or null.
      */
-    function triggerShortsNavigation(key) {
-         log(`[Shorts] Simulating ${key} for navigation`);
-         const keyCode = key === 'ArrowUp' ? 38 : 40;
-         document.dispatchEvent(new KeyboardEvent('keydown', {
-             key: key,
-             code: key,
-             keyCode: keyCode,
-             which: keyCode,
-             bubbles: true,
-             cancelable: true
-         }));
+    function getTargetZone(e, boundEl) {
+        const target = e.target;
+        
+        // 1. Blacklist: Exclude Native UI elements (Buttons, Sliders, Links)
+        // Kept purely for interactive elements that MUST function natively
+        if (target.closest('button, a, .ytp-progress-bar-container, .ytp-volume-panel, .ytp-settings-menu, .ytp-popup, .ytp-chrome-bottom')) {
+            return null;
+        }
+
+        // 2. Identify the true Visual Player (for coordinates)
+        let visualPlayer = boundEl;
+        
+        // If we bound to the wrapper (Shorts or Normal), dig down to the actual video player for sizing
+        if (boundEl.tagName.toLowerCase() === 'ytd-reel-video-renderer' || boundEl.tagName.toLowerCase() === 'ytd-player') {
+             const inner = boundEl.querySelector('.html5-video-player');
+             if (inner) visualPlayer = inner;
+        }
+        
+        // 3. Coordinate Calculation
+        const rect = visualPlayer.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return null;
+
+        const mouseX = (e.clientX - rect.left) / rect.width;
+        const mouseY = (e.clientY - rect.top) / rect.height;
+
+        // Check if mouse is strictly strictly inside the visual player area
+        if (mouseX < 0 || mouseX > 1 || mouseY < 0 || mouseY > 1) {
+             return null;
+        }
+
+        for (const zone of CONFIG) {
+            const zX = parseCoord(zone.offset.x, 1);
+            const zY = parseCoord(zone.offset.y, 1);
+            const zW = parseCoord(zone.size.width, 1);
+            const zH = parseCoord(zone.size.height, 1);
+
+            if (mouseX >= zX && mouseX <= (zX + zW) && mouseY >= zY && mouseY <= (zY + zH)) {
+                return { zone, player: visualPlayer }; // Return the inner player for API calls
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find the element that actually has the YouTube API methods.
+     * 
+     * @param {HTMLElement} element The starting element to search from.
+     * @returns {Object|null} The player object with API methods.
+     */
+    function getAPIPlayer(element) {
+        // 1. Check if the element itself has the API
+        if (element && typeof element.getVolume === 'function') {
+            return element;
+        }
+        
+        // 2. Check for the global movie_player (most reliable for Normal videos and centralized Shorts)
+        const globalPlayer = document.getElementById('movie_player');
+        if (globalPlayer && typeof globalPlayer.getVolume === 'function') {
+            return globalPlayer;
+        }
+        
+        // 3. Try to find closest ytd-player (sometimes holds the API in complex layouts)
+        if (element) {
+            const wrapper = element.closest('ytd-player');
+            if (wrapper && typeof wrapper.getVolume === 'function') {
+                return wrapper;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -622,49 +650,64 @@
     function onWheel(e) {
         // Robust Shorts detection
         const isShorts = window.location.pathname.startsWith('/shorts/');
-        const result = getTargetZone(e);
+        const result = getTargetZone(e, e.currentTarget);
 
         if (!result) {
             // [UX Feature] Shorts Navigation on non-zone scroll
             if (isShorts) {
-                 // Avoid triggering navigation when scrolling in comments or other panels
                  if (e.target.closest('ytd-engagement-panel-section-list-renderer, ytd-comments, #comments')) return;
                 
                  const now = Date.now();
-                 // Debounce navigation actions to prevent skipping multiple videos at once
                  if (now - lastWheelTime < 250) return; 
                  lastWheelTime = now;
 
-                 // Determine direction and trigger
                  e.preventDefault();
                  e.stopImmediatePropagation();
                  
                  const key = e.deltaY < 0 ? 'ArrowUp' : 'ArrowDown';
                  triggerShortsNavigation(key);
             }
+            // For normal videos, if no zone match, we intentionally do nothing (allow native scroll)
             return;
         }
         
-        const { zone, player: targetPlayer } = result;
-        if (targetPlayer) player = targetPlayer;
+        const { zone, player: visualElement } = result;
 
         e.preventDefault();
         e.stopImmediatePropagation();
 
+        // --- Controller Resolution ---
+        // Find the actual API object to control
+        const apiPlayer = getAPIPlayer(visualElement);
+        if (!apiPlayer) {
+            log('[Error] Zone matched but NO API PLAYER found!');
+            return;
+        }
+        
+        // Update global 'player' for Actions usage (backward compatibility with Actions object)
+        player = apiPlayer;
+
         if (SETTINGS.USE_WHEEL_COUNT_FIXED) {
             wheelCount++;
-            if (wheelCount < SETTINGS.WHEEL_COUNT_THRESHOLD) return;
+            if (wheelCount < SETTINGS.WHEEL_COUNT_THRESHOLD) {
+                // console.log('[YTM Debug] Throttled by Count:', wheelCount);
+                return;
+            }
             wheelCount = 0;
         } else {
             const now = Date.now();
-            if (now - lastWheelTime < SETTINGS.WHEEL_DELAY) return;
+            if (now - lastWheelTime < SETTINGS.WHEEL_DELAY) {
+                // console.log('[YTM Debug] Throttled by Time');
+                return;
+            }
             lastWheelTime = now;
         }
 
         const actionKey = e.deltaY < 0 ? 'wheel_up' : 'wheel_down';
         const cfg = zone.mouse_action[actionKey];
+        
         if (cfg && Actions[cfg.action]) {
-            log(`[Action] Wheel trigger: ${cfg.action}`);
+            // log(`[Action] Wheel trigger: ${cfg.action}`);
             Actions[cfg.action](cfg.value);
             if (player.showControls) player.showControls();
         }
@@ -676,11 +719,13 @@
      * @param {MouseEvent} e The mouse event.
      */
     function onMouse(e) {
-        const result = getTargetZone(e);
+        const result = getTargetZone(e, e.currentTarget);
         if (!result) return;
 
-        const { zone, player: targetPlayer } = result;
-        if (targetPlayer) player = targetPlayer;
+        const { zone, player: visualElement } = result;
+        
+        const apiPlayer = getAPIPlayer(visualElement);
+        if (apiPlayer) player = apiPlayer;
 
         let actionKey = "";
         if (e.button === 0) actionKey = 'left_click';
@@ -701,25 +746,49 @@
     }
 
     /**
-     * Initialize the script.
-     * Binds references, creates UI elements, and starts monitoring.
+     * Check for all player instances and bind events to any new ones.
      */
-    function init() {
-        player = document.getElementById('movie_player') || document.querySelector('.html5-video-player');
-        if (!player) return;
-
-        const osd = createOSD();
-        if (!player.contains(osd)) player.appendChild(osd);
-
-        updateZoneVisuals();
-        log('Interaction layer bound globally, target:', player.id || player.className);
+    function checkAndBindPlayers() {
+        // Find all potential players:
+        // 1. #movie_player (Normal - old)
+        // 2. ytd-reel-video-renderer (Shorts Wrapper)
+        // 3. ytd-player (Normal Wrapper - Better capture)
+        // 4. .html5-video-player (Fallback)
+        const players = document.querySelectorAll('#movie_player, ytd-reel-video-renderer, ytd-player, .html5-video-player');
+        
+        players.forEach(p => {
+            if (!boundElements.has(p)) {
+                log('Binding events to container:', p.id || p.tagName);
+                
+                p.addEventListener('wheel', onWheel, { passive: false, capture: true });
+                p.addEventListener('mousedown', onMouse, { capture: true });
+                p.addEventListener('click', onMouse, { capture: true });
+                p.addEventListener('dblclick', onMouse, { capture: true });
+                p.addEventListener('contextmenu', onMouse, { capture: true });
+                
+                boundElements.add(p);
+                
+                // OSD Management
+                if (!window.location.pathname.startsWith('/shorts/') && p.id === 'movie_player') {
+                    const osd = createOSD();
+                    if (!p.contains(osd)) p.appendChild(osd);
+                }
+            }
+        });
+        
+        // Update global reference for fallback
+        const mainPlayer = document.getElementById('movie_player') || document.querySelector('.html5-video-player');
+        if (mainPlayer) player = mainPlayer;
     }
 
-    document.addEventListener('wheel', onWheel, { passive: false, capture: true });
-    document.addEventListener('mousedown', onMouse, { capture: true });
-    document.addEventListener('click', onMouse, { capture: true });
-    document.addEventListener('dblclick', onMouse, { capture: true });
-    document.addEventListener('contextmenu', onMouse, { capture: true });
+    /**
+     * Initialize the script.
+     */
+    function init() {
+        checkAndBindPlayers();
+        updateZoneVisuals();
+        log('Init cycle complete.');
+    }
 
     // Hotkey listener for Zone Visibility
     document.addEventListener('keydown', (e) => {
@@ -731,7 +800,7 @@
     });
 
     window.addEventListener('yt-navigate-finish', () => {
-        log('SPA navigation completed, updating references...');
+        log('SPA navigation completed, refreshing bindings...');
         init();
     });
 
@@ -741,12 +810,9 @@
         window.addEventListener('load', init);
     }
 
+    // Polling observer to catch dynamically added players (Shorts infinite scroll)
     const observer = new MutationObserver(() => {
-        const currentPlayer = document.getElementById('movie_player') || document.querySelector('.html5-video-player');
-        if (currentPlayer && currentPlayer !== player) {
-            player = currentPlayer;
-            init();
-        }
+        checkAndBindPlayers();
     });
     observer.observe(document.body, { childList: true, subtree: true });
 

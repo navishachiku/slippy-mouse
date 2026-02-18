@@ -2,10 +2,14 @@
 
 All notable changes to the **YouTube Mouse Master** project will be documented in this file.
 
-## [0.6.0] - 2026-02-18
+## [0.6.0] - 2026-02-19
 
 ### Fixed
 - **Shorts Scrolling**: Prevented video navigation from triggering when scrolling inside the comments section or engagement panels. 
+- **OSD Glow**: Fixed the glow effect on OSD text.
+
+### Changed
+- **Event Penetration**: Improved event handling to ensure mouse wheel events inside zones do not trigger default page scrolling on Shorts.
 
 ## [0.5.0] - 2026-02-17
 
