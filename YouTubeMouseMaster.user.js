@@ -70,8 +70,8 @@
             size: { width: "30%", height: "100%" },
             offset: { x: "70%", y: "0%" },
             mouse_action: {
-                left_click: { action: "speed_set", value: 2.0 },    // Left click: 2x
-                right_click: { action: "speed_set", value: 1.0 },   // Right click: 1x
+                left_click: { action: "speed_set", value: 1.0 },    // Left click: 1x
+                right_click: { action: "speed_set", value: 2.0 },   // Right click: 2x
                 middle_click: { action: "none" },                   // Pass-through
                 wheel_up: { action: "speed_up", value: 0.25 },      // Wheel up: Speed +0.25x
                 wheel_down: { action: "speed_down", value: 0.25 }   // Wheel down: Speed -0.25x
