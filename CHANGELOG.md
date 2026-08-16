@@ -2,6 +2,14 @@
 
 All notable changes to the **YouTube Mouse Master** project will be documented in this file.
 
+## [0.9.0] - 2026-08-17
+
+### Added
+- **In-page Settings Panel**: A graphical panel opened from a mouse icon in the player control bar (YouTube and Bilibili), with four tabs — General, Zone Actions, Wheel, and Advanced. Every parameter and per-zone action mapping is editable with instant preview; saved settings persist in browser storage, so script updates never wipe customizations. Includes JSON export/import, factory reset, light/dark/auto themes with iOS-style controls, and interface localization into 7 languages picked from the browser locale.
+
+### Changed
+- **Hotkeys**: Hotkeys now support modifier combinations matched by physical key. The zone overlay default moved from `F9` to `Alt+Shift+Z`; the settings panel hotkey is unbound by default (the control-bar button is the main entry). Hotkeys are ignored while typing in input fields.
+
 ## [0.8.0] - 2026-08-16
 
 ### Added
