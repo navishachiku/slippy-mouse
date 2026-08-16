@@ -14,23 +14,51 @@ Script de melhoria de interação para o player do YouTube projetado para usuár
 
 * **Roda Adaptativa**: Um clique físico da roda ou um deslize equivale exatamente a uma ação em qualquer dispositivo — rodas de mouse, trackpads e softwares de rolagem suave (Mos, SmoothScroll, Logitech Options+) — sem necessidade de ajustes. Caudas de inércia são suprimidas e deslizes longos deliberados mantêm resposta proporcional.
 
-![DEMO SCREENSHOT](./demo.jpeg)
+* **Painel de Configurações Gráfico**: Todos os parâmetros e mapeamentos de ações de zona podem ser ajustados em um painel na página — as alterações se aplicam na hora e ficam salvas no navegador, então atualizações do script nunca apagam suas personalizações.
+
+![DEMO SCREENSHOT](./images/demo.jpeg)
+
+## 🎛️ Painel de Configurações
+
+Sem edição de código — clique no ícone de mouse na barra de controles do player para abrir o painel (disponível no YouTube e no Bilibili):
+
+![Settings Panel](./images/settings-general.png)
+
+* **Quatro abas**: Geral (roda adaptativa, atalhos, aparência, OSD), Ações de Zona, Roda (ajuste adaptativo e filtragem manual) e Avançado (depuração, dados de configuração).
+* **Mapeamento de ações de zona**: Selecione uma zona colorida e atribua qualquer ação com seu valor a cada gatilho (clique esquerdo / direito / do meio, roda para cima / baixo):
+
+![Zone Actions](./images/settings-zones.png)
+
+* **Aplicação instantânea e persistência**: As mudanças valem na hora; "Salvar" grava no armazenamento do navegador — **atualizações do script nunca apagam suas configurações**; "Cancelar" ou Esc reverte.
+* **Atalhos**: A exibição de zonas usa `Alt+Shift+Z` por padrão; o atalho do painel vem desativado. Ambos podem ser reatribuídos no painel, com suporte a combinações de modificadores (Esc cancela a captura, Backspace limpa).
+* **Exportar / Importar / Redefinir**: Faça backup das configurações em JSON, leve-as para outro navegador ou restaure os padrões de fábrica com um clique.
+* **Idioma da interface**: Segue o idioma do navegador (inglês, chinês tradicional/simplificado, japonês, coreano, português, espanhol), com inglês como padrão.
+* **Aparência**: Claro / escuro / automático (segue o sistema).
 
 ## ⚙️ Parâmetros Personalizáveis
 
-Você pode ajustar as configurações diretamente nos blocos `SETTINGS` e `CONFIG` no topo do script.
+Todos os parâmetros podem ser ajustados no painel de configurações (recomendado). Você também pode editar diretamente os blocos `SETTINGS` e `CONFIG` no topo do script, mas note: edições diretas são sobrescritas nas atualizações do script, enquanto as configurações do painel são preservadas.
+
+<details>
+<summary><b>Avançado: referência completa de parâmetros</b> (clique para expandir)</summary>
 
 ### Configurações Globais (Global Settings)
 
 | Parâmetro | Descrição | Padrão |
 | :--- | :--- | :--- |
 | `DEBUG` | Se deve exibir mensagens de depuração no Console | `false` |
-| `ZONE_TOGGLE_KEY` | Tecla de atalho para alternar a visibilidad das zonas | `F9` |
+| `ZONE_TOGGLE_KEY` | Tecla de atalho para alternar a visibilidad das zonas (suporta combinações de modificadores) | `Alt+Shift+Z` |
+| `SETTINGS_TOGGLE_KEY` | Atalho para abrir o painel de configurações (a entrada principal é o botão da barra de controles) | Não definido |
 | `OSD_DURATION` | Tempo que os avisos OSD permanecem na tela (ms) | `800` |
 | `OSD_FADE_OUT` | Duração da animação de fade-out do OSD (ms) | `150` |
 | `OSD_FONT_SIZE` | Tamanho da fonte do texto OSD (suporta px, em, rem, etc.) | `28px` |
 | `ADAPTIVE_WHEEL` | Roda adaptativa: um clique/deslize = uma ação em qualquer dispositivo. Defina como `false` para usar as configurações manuais abaixo | `true` |
 | `WHEEL_STEP` | Modo adaptativo: rolagem acumulada (px) por ação; diminua para resposta mais fina | `100` |
+| `GESTURE_GAP` | Adaptativo: silêncio (ms) após o qual a entrada conta como novo gesto | `150` |
+| `MIN_ACTION_INTERVAL` | Adaptativo: intervalo mínimo (ms) entre ações; limita rajadas | `80` |
+| `IMPULSE_MIN` | Adaptativo: deslocamento mínimo (px) para liquidar como uma ação; filtra toques acidentais | `20` |
+| `REACCEL_FACTOR` | Adaptativo: razão de salto de magnitude que marca um novo clique dentro de uma cauda em decaimento | `1.5` |
+| `DISCRETE_SETTLE` | Adaptativo: atraso de liquidação (ms) para cliques de evento único (roda sem suavização) | `60` |
 | `USE_WHEEL_COUNT_FIXED` | Apenas modo manual: se deve ativar a filtragem de contagem de roda fixa | `false` |
 | `WHEEL_DELAY` | Apenas modo manual: tempo de atraso de debounce para eventos de roda (ms) | `1` |
 | `WHEEL_COUNT_THRESHOLD` | Limite de acionamento: quantos eventos de roda acumular antes de agir | `14` |
@@ -63,6 +91,8 @@ Em `mouse_action`, os tipos de `action` que você pode usar são:
 | `speed_down` | Diminuir velocidade | `0.25` |
 | `speed_set` | Definir velocidade fixa | `1.0`, `2.0`, etc. |
 | `none` | Nenhuma ação | Passa o evento para o tratamento nativo do YouTube |
+
+</details>
 
 ## 📦 Instalação
 
