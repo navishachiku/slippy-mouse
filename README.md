@@ -8,6 +8,8 @@ An interaction enhancement script for the YouTube player designed for power user
 
 ## ✨ Key Features
 
+* **Multi-Site Support**: Works on both **YouTube** and **Bilibili** (`www.bilibili.com`), with identical zones and actions on each site.
+
 * **Quick Controls**: Set custom action zones on the player that correspond to mouse actions such as clicks and wheel scrolls to quickly adjust volume, speed, progress, etc.
 
 * **Custom Action Zones**: Supports highly customizable sensor zone settings, allowing you to freely adjust zone size and position (default provides Left, Middle, and Right zone configurations).

@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         YouTube Mouse Master
 // @namespace    https://github.com/navishachiku/youtube-mouse-master
-// @version      0.6
-// @description  High-performance YouTube player interaction script: support three-zone control, progress seek, prevent event penetration, high-frequency wheel filtering, and fix OSD timer conflicts.
+// @version      0.7
+// @description  High-performance YouTube & Bilibili player interaction script: support three-zone control, progress seek, prevent event penetration, high-frequency wheel filtering, and fix OSD timer conflicts.
 // @author       navishachiku & Gemini
 // @match        *://www.youtube.com/*
+// @match        *://www.bilibili.com/*
 // @grant        none
 // @run-at       document-start
 // ==/UserScript==
@@ -81,12 +82,108 @@
 
     /**
      * Log debug messages to the console if debugging is enabled.
-     * 
+     *
      * @param {...any} args The messages or objects to log.
      */
     function log(...args) {
         if (SETTINGS.DEBUG) console.log('[YTM Debug]', ...args);
     }
+
+    /**
+     * [Site Adapter]
+     * Site-specific selectors and player API resolution.
+     * YouTube exposes a rich player API directly on the #movie_player element.
+     * Bilibili's bpx player exposes no public API on the DOM, so its raw
+     * <video> element is wrapped in a shim providing the same API surface
+     * consumed by Actions.
+     */
+    const SITE = location.hostname.endsWith('bilibili.com') ? 'bilibili' : 'youtube';
+
+    const videoShims = new WeakMap();
+
+    /**
+     * Wrap a raw HTMLVideoElement with a YouTube-player-like API.
+     *
+     * @param {HTMLVideoElement} video The video element to wrap.
+     *
+     * @returns {Object} An object exposing the subset of the YouTube player API used by Actions.
+     */
+    function wrapVideoElement(video) {
+        let shim = videoShims.get(video);
+        if (!shim) {
+            shim = {
+                getVolume: () => Math.round(video.volume * 100),
+                setVolume: (v) => { video.volume = Math.min(100, Math.max(0, v)) / 100; },
+                isMuted: () => video.muted,
+                unMute: () => { video.muted = false; },
+                getCurrentTime: () => video.currentTime,
+                getDuration: () => video.duration || 0,
+                seekTo: (t) => { video.currentTime = t; },
+                getPlayerState: () => (video.paused ? 2 : 1),
+                playVideo: () => video.play(),
+                pauseVideo: () => video.pause(),
+                getPlaybackRate: () => video.playbackRate,
+                setPlaybackRate: (r) => { video.playbackRate = r; }
+            };
+            videoShims.set(video, shim);
+        }
+        return shim;
+    }
+
+    const ADAPTERS = {
+        youtube: {
+            // 1. #movie_player (Normal - old)
+            // 2. ytd-player (Normal Wrapper - Better capture)
+            // 3. .html5-video-player (Fallback)
+            playerSelector: '#movie_player, ytd-player, .html5-video-player',
+            // Native UI elements (Buttons, Sliders, Links) that MUST function natively
+            uiBlacklist: 'button, a, .ytp-progress-bar-container, .ytp-volume-panel, .ytp-settings-menu, .ytp-popup, .ytp-chrome-bottom',
+            resolveVisualPlayer(boundEl) {
+                // If bound to a wrapper (Shorts or Normal), dig down to the actual video player for sizing
+                const tag = boundEl.tagName.toLowerCase();
+                if (tag === 'ytd-reel-video-renderer' || tag === 'ytd-player') {
+                    const inner = boundEl.querySelector('.html5-video-player');
+                    if (inner) return inner;
+                }
+                return boundEl;
+            },
+            getAPIPlayer(element) {
+                // 1. Check if the element itself has the API
+                if (element && typeof element.getVolume === 'function') {
+                    return element;
+                }
+                // 2. Check for the global movie_player (most reliable for Normal videos and centralized Shorts)
+                const globalPlayer = document.getElementById('movie_player');
+                if (globalPlayer && typeof globalPlayer.getVolume === 'function') {
+                    return globalPlayer;
+                }
+                // 3. Try to find closest ytd-player (sometimes holds the API in complex layouts)
+                if (element) {
+                    const wrapper = element.closest('ytd-player');
+                    if (wrapper && typeof wrapper.getVolume === 'function') {
+                        return wrapper;
+                    }
+                }
+                return null;
+            }
+        },
+        bilibili: {
+            playerSelector: '#bilibili-player, .bpx-player-container',
+            uiBlacklist: 'button, a, input, .bpx-player-control-wrap, .bpx-player-top-wrap, .bpx-player-sending-area, .bpx-player-ctx-menu, .bpx-player-dialog-wrap, .bpx-player-toast-wrap',
+            resolveVisualPlayer(boundEl) {
+                // Exclude the danmaku sending bar below the video from zone coordinates
+                return boundEl.querySelector('.bpx-player-video-area') || boundEl;
+            },
+            getAPIPlayer(element) {
+                const container = (element && element.closest('#bilibili-player, .bpx-player-container')) || element;
+                const video = (container && container.querySelector('video'))
+                    || document.querySelector('#bilibili-player video, .bpx-player-container video');
+                return video ? wrapVideoElement(video) : null;
+            }
+        }
+    };
+
+    const ADAPTER = ADAPTERS[SITE];
 
     log('Script loaded, preparing for initialization...');
 
@@ -94,11 +191,11 @@
     let lastWheelTime = 0;
     let wheelCount = 0;
     
-    // Global player reference (API interface)
+    // Visual player element (DOM) — used for OSD attachment and zone visuals
     let player = null;
-    
-    // Internal reference for the DOM element we are listening to
-    let activeBoundPlayer = null;
+
+    // Player control interface — YouTube API element, or a wrapped <video> shim on Bilibili
+    let api = null;
 
     let osdTimer = null;      // Timer for handling fade-out
     let osdHideTimer = null;  // Timer for handling display: none
@@ -502,58 +599,58 @@
      */
     const Actions = {
         volume_up: (val) => {
-            if (typeof player.getVolume !== 'function') return;
-            const next = Math.min(100, player.getVolume() + val);
-            player.setVolume(next);
-            if (player.isMuted && player.isMuted()) player.unMute();
+            if (!api || typeof api.getVolume !== 'function') return;
+            const next = Math.min(100, api.getVolume() + val);
+            api.setVolume(next);
+            if (api.isMuted && api.isMuted()) api.unMute();
             showOSD(`🔊 ${next}%`);
         },
         volume_down: (val) => {
-            if (typeof player.getVolume !== 'function') return;
-            const next = Math.max(0, player.getVolume() - val);
-            player.setVolume(next);
+            if (!api || typeof api.getVolume !== 'function') return;
+            const next = Math.max(0, api.getVolume() - val);
+            api.setVolume(next);
             showOSD(`🔊 ${next}%`);
         },
         volume_set: (val) => {
-            if (typeof player.setVolume !== 'function') return;
-            player.setVolume(val);
-            if (player.isMuted && player.isMuted() && val > 0) player.unMute();
+            if (!api || typeof api.setVolume !== 'function') return;
+            api.setVolume(val);
+            if (api.isMuted && api.isMuted() && val > 0) api.unMute();
             showOSD(val === 0 ? `🔊 Mute` : `🔊 ${val}%`);
         },
         seek: (delta) => {
-            if (typeof player.getCurrentTime !== 'function' || typeof player.getDuration !== 'function') return;
-            const current = player.getCurrentTime();
-            const duration = player.getDuration();
+            if (!api || typeof api.getCurrentTime !== 'function' || typeof api.getDuration !== 'function') return;
+            const current = api.getCurrentTime();
+            const duration = api.getDuration();
             const next = Math.max(0, Math.min(duration, current + delta));
-            player.seekTo(next, true);
+            api.seekTo(next, true);
             showOSD(`${delta > 0 ? '⏩' : '⏪'} ${formatTime(next)} / ${formatTime(duration)}`);
         },
         toggle_play_pause: () => {
-            if (typeof player.getPlayerState !== 'function') return;
-            const state = player.getPlayerState();
+            if (!api || typeof api.getPlayerState !== 'function') return;
+            const state = api.getPlayerState();
             if (state === 1) {
-                player.pauseVideo();
+                api.pauseVideo();
                 showOSD('⏸️');
             } else {
-                player.playVideo();
+                api.playVideo();
                 showOSD('▶️');
             }
         },
         speed_up: (val) => {
-            if (typeof player.getPlaybackRate !== 'function') return;
-            const next = player.getPlaybackRate() + val;
-            player.setPlaybackRate(next);
+            if (!api || typeof api.getPlaybackRate !== 'function') return;
+            const next = api.getPlaybackRate() + val;
+            api.setPlaybackRate(next);
             showOSD(`🚀 ${next.toFixed(2)}x`);
         },
         speed_down: (val) => {
-            if (typeof player.getPlaybackRate !== 'function') return;
-            const next = Math.max(0.25, player.getPlaybackRate() - val);
-            player.setPlaybackRate(next);
+            if (!api || typeof api.getPlaybackRate !== 'function') return;
+            const next = Math.max(0.25, api.getPlaybackRate() - val);
+            api.setPlaybackRate(next);
             showOSD(`🐢 ${next.toFixed(2)}x`);
         },
         speed_set: (val) => {
-            if (typeof player.setPlaybackRate !== 'function') return;
-            player.setPlaybackRate(val);
+            if (!api || typeof api.setPlaybackRate !== 'function') return;
+            api.setPlaybackRate(val);
             showOSD(`🐾 ${val.toFixed(2)}x`);
         },
         none: () => {}
@@ -572,22 +669,16 @@
      */
     function getTargetZone(e, boundEl) {
         const target = e.target;
-        
+
         // 1. Blacklist: Exclude Native UI elements (Buttons, Sliders, Links)
         // Kept purely for interactive elements that MUST function natively
-        if (target.closest('button, a, .ytp-progress-bar-container, .ytp-volume-panel, .ytp-settings-menu, .ytp-popup, .ytp-chrome-bottom')) {
+        if (target.closest(ADAPTER.uiBlacklist)) {
             return null;
         }
 
         // 2. Identify the true Visual Player (for coordinates)
-        let visualPlayer = boundEl;
-        
-        // If we bound to the wrapper (Shorts or Normal), dig down to the actual video player for sizing
-        if (boundEl.tagName.toLowerCase() === 'ytd-reel-video-renderer' || boundEl.tagName.toLowerCase() === 'ytd-player') {
-             const inner = boundEl.querySelector('.html5-video-player');
-             if (inner) visualPlayer = inner;
-        }
-        
+        const visualPlayer = ADAPTER.resolveVisualPlayer(boundEl);
+
         // 3. Coordinate Calculation
         const rect = visualPlayer.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) return null;
@@ -614,49 +705,14 @@
     }
 
     /**
-     * Find the element that actually has the YouTube API methods.
-     * 
-     * @param {HTMLElement} element The starting element to search from.
-     * @returns {Object|null} The player object with API methods.
-     */
-    function getAPIPlayer(element) {
-        // 1. Check if the element itself has the API
-        if (element && typeof element.getVolume === 'function') {
-            return element;
-        }
-        
-        // 2. Check for the global movie_player (most reliable for Normal videos and centralized Shorts)
-        const globalPlayer = document.getElementById('movie_player');
-        if (globalPlayer && typeof globalPlayer.getVolume === 'function') {
-            return globalPlayer;
-        }
-        
-        // 3. Try to find closest ytd-player (sometimes holds the API in complex layouts)
-        if (element) {
-            const wrapper = element.closest('ytd-player');
-            if (wrapper && typeof wrapper.getVolume === 'function') {
-                return wrapper;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Handle mouse wheel events.
      * 
      * @param {WheelEvent} e The wheel event.
      */
     function onWheel(e) {
-        // Robust Shorts detection
-        const isShorts = window.location.pathname.startsWith('/shorts/');
         const result = getTargetZone(e, e.currentTarget);
+        if (!result) return;
 
-        if (!result) {
-            // Prevent default ONLY if scrolling inside comments/engagement panel
-            if (isShorts && e.target.closest('ytd-engagement-panel-section-list-renderer, ytd-comments, #comments')) return;
-        }
-        
         const { zone, player: visualElement } = result;
 
         e.preventDefault();
@@ -664,14 +720,14 @@
 
         // --- Controller Resolution ---
         // Find the actual API object to control
-        const apiPlayer = getAPIPlayer(visualElement);
+        const apiPlayer = ADAPTER.getAPIPlayer(visualElement);
         if (!apiPlayer) {
             log('[Error] Zone matched but NO API PLAYER found!');
             return;
         }
-        
-        // Update global 'player' for Actions usage (backward compatibility with Actions object)
-        player = apiPlayer;
+
+        player = visualElement;
+        api = apiPlayer;
 
         if (SETTINGS.USE_WHEEL_COUNT_FIXED) {
             wheelCount++;
@@ -695,7 +751,7 @@
         if (cfg && Actions[cfg.action]) {
             // log(`[Action] Wheel trigger: ${cfg.action}`);
             Actions[cfg.action](cfg.value);
-            if (player.showControls) player.showControls();
+            if (api.showControls) api.showControls();
         }
     }
 
@@ -709,9 +765,12 @@
         if (!result) return;
 
         const { zone, player: visualElement } = result;
-        
-        const apiPlayer = getAPIPlayer(visualElement);
-        if (apiPlayer) player = apiPlayer;
+
+        const apiPlayer = ADAPTER.getAPIPlayer(visualElement);
+        if (apiPlayer) {
+            player = visualElement;
+            api = apiPlayer;
+        }
 
         let actionKey = "";
         if (e.button === 0) actionKey = 'left_click';
@@ -735,36 +794,35 @@
      * Check for all player instances and bind events to any new ones.
      */
     function checkAndBindPlayers() {
-        // Find all potential players:
-        // 1. #movie_player (Normal - old)
-        // 2. ytd-player (Normal Wrapper - Better capture)
-        // 3. .html5-video-player (Fallback)
-        const players = document.querySelectorAll('#movie_player, ytd-player, .html5-video-player');
-        console.log("🚀 ~ checkAndBindPlayers ~ players:", players)
-        
+        const players = document.querySelectorAll(ADAPTER.playerSelector);
+        log('checkAndBindPlayers found:', players.length);
+
         players.forEach(p => {
             if (!boundElements.has(p)) {
                 log('Binding events to container:', p.id || p.tagName);
-                
+
                 p.addEventListener('wheel', onWheel, { passive: false, capture: true });
                 p.addEventListener('mousedown', onMouse, { capture: true });
                 p.addEventListener('click', onMouse, { capture: true });
                 p.addEventListener('dblclick', onMouse, { capture: true });
                 p.addEventListener('contextmenu', onMouse, { capture: true });
-                
+
                 boundElements.add(p);
-                
+
                 // OSD Management
-                if (!window.location.pathname.startsWith('/shorts/') && p.id === 'movie_player') {
+                if (SITE === 'youtube' && !window.location.pathname.startsWith('/shorts/') && p.id === 'movie_player') {
                     const osd = createOSD();
                     if (!p.contains(osd)) p.appendChild(osd);
                 }
             }
         });
-        
-        // Update global reference for fallback
-        const mainPlayer = document.getElementById('movie_player') || document.querySelector('.html5-video-player');
-        if (mainPlayer) player = mainPlayer;
+
+        // Update global references for fallback
+        const mainPlayer = document.querySelector(ADAPTER.playerSelector);
+        if (mainPlayer) {
+            player = ADAPTER.resolveVisualPlayer(mainPlayer);
+            if (!api) api = ADAPTER.getAPIPlayer(player);
+        }
     }
 
     /**
@@ -785,10 +843,12 @@
         }
     });
 
-    window.addEventListener('yt-navigate-finish', () => {
-        log('SPA navigation completed, refreshing bindings...');
-        init();
-    });
+    if (SITE === 'youtube') {
+        window.addEventListener('yt-navigate-finish', () => {
+            log('SPA navigation completed, refreshing bindings...');
+            init();
+        });
+    }
 
     if (document.readyState === 'complete') {
         init();
@@ -796,11 +856,19 @@
         window.addEventListener('load', init);
     }
 
-    // Polling observer to catch dynamically added players (Shorts infinite scroll)
-    const observer = new MutationObserver(() => {
-        checkAndBindPlayers();
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Polling observer to catch dynamically added players (Shorts infinite scroll, Bilibili SPA)
+    const startObserver = () => {
+        const observer = new MutationObserver(() => {
+            checkAndBindPlayers();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    };
+    // At document-start the body may not exist yet
+    if (document.body) {
+        startObserver();
+    } else {
+        window.addEventListener('DOMContentLoaded', startObserver);
+    }
 
     // Update visuals on window resize with debounce
     let resizeTimer = null;

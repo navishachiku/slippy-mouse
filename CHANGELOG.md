@@ -2,6 +2,15 @@
 
 All notable changes to the **YouTube Mouse Master** project will be documented in this file.
 
+## [0.7.0] - 2026-08-16
+
+### Added
+- **Bilibili Support**: The script now also works on `www.bilibili.com` (regular videos and bangumi pages using the bpx player). A site adapter layer wraps Bilibili's raw `<video>` element with the same API surface as the YouTube player, so all zones and actions (volume, seek, speed, play/pause) work identically on both sites.
+
+### Fixed
+- **Wheel Crash**: Wheel events outside any zone (e.g. over blacklisted native UI) no longer throw a `TypeError` from destructuring a null zone result.
+- **Early Injection**: Guarded the `MutationObserver` setup against `document.body` not existing yet at `document-start`.
+
 ## [0.6.0] - 2026-02-19
 
 ### Fixed

@@ -4,6 +4,8 @@ Script de melhoria de interação para o player do YouTube projetado para usuár
 
 ## ✨ Principais Características
 
+* **Suporte Multi-Site**: Funciona tanto no **YouTube** quanto no **Bilibili** (`www.bilibili.com`), com zonas e ações idênticas em ambos os sites.
+
 * **Controles Rápidos**: Defina zonas de ação personalizadas no player que correspondem a ações do mouse, como cliques e rolagem da roda, para ajustar rapidamente volume, velocidade, progresso, etc.
 
 * **Zonas de Ação Personalizadas**: Suporta configurações de zonas sensoras altamente personalizáveis, permitindo ajustar livremente o tamanho e a posição da zona (o padrão fornece as configurações de zonas Esquerda, Centro e Direita).

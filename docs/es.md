@@ -4,6 +4,8 @@ Script de mejora de interacción para el reproductor de YouTube diseñado para u
 
 ## ✨ Características Principales
 
+* **Soporte Multi-Sitio**: Funciona tanto en **YouTube** como en **Bilibili** (`www.bilibili.com`), con zonas y acciones idénticas en ambos sitios.
+
 * **Controles Rápidos**: Configura zonas de acción personalizadas en el reproductor que corresponden a acciones del ratón, como clics y desplazamiento de rueda, para ajustar rápidamente el volumen, velocidad, progreso, etc.
 
 * **Zonas de Acción Personalizadas**: Admite ajustes de zona altamente personalizables, permitiéndote ajustar libremente el tamaño y la posición de la zona (la configuración predeterminada incluye las zonas Izquierda, Centro y Derecha).
