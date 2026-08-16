@@ -12,7 +12,7 @@ Script de melhoria de interação para o player do YouTube projetado para usuár
 
 * **Interação Sem Sobreposição (Zero-Overlay)**: Abandona as tradicionais camadas transparentes e utiliza cálculos de coordenadas de alto desempenho, garantindo que não haja interferência nos cliques da interface nativa.
 
-* **Otimização para Mac / Roda de Alta Frequência**: O mecanismo de filtragem integrado adapta-se perfeitamente ao MOS, SmoothScroll ou trackpads do Mac, evitando saltos excessivos por sensibilidade.
+* **Roda Adaptativa**: Um clique físico da roda ou um deslize equivale exatamente a uma ação em qualquer dispositivo — rodas de mouse, trackpads e softwares de rolagem suave (Mos, SmoothScroll, Logitech Options+) — sem necessidade de ajustes. Caudas de inércia são suprimidas e deslizes longos deliberados mantêm resposta proporcional.
 
 ![DEMO SCREENSHOT](./demo.jpeg)
 
@@ -29,8 +29,10 @@ Você pode ajustar as configurações diretamente nos blocos `SETTINGS` e `CONFI
 | `OSD_DURATION` | Tempo que os avisos OSD permanecem na tela (ms) | `800` |
 | `OSD_FADE_OUT` | Duração da animação de fade-out do OSD (ms) | `150` |
 | `OSD_FONT_SIZE` | Tamanho da fonte do texto OSD (suporta px, em, rem, etc.) | `28px` |
-| `USE_WHEEL_COUNT_FIXED` | Se deve ativar a filtragem de contagem de roda fixa (Recomendado para Mac) | `false` |
-| `WHEEL_DELAY` | Tempo de atraso de debounce para eventos de roda (ms) | `1` |
+| `ADAPTIVE_WHEEL` | Roda adaptativa: um clique/deslize = uma ação em qualquer dispositivo. Defina como `false` para usar as configurações manuais abaixo | `true` |
+| `WHEEL_STEP` | Modo adaptativo: rolagem acumulada (px) por ação; diminua para resposta mais fina | `100` |
+| `USE_WHEEL_COUNT_FIXED` | Apenas modo manual: se deve ativar a filtragem de contagem de roda fixa | `false` |
+| `WHEEL_DELAY` | Apenas modo manual: tempo de atraso de debounce para eventos de roda (ms) | `1` |
 | `WHEEL_COUNT_THRESHOLD` | Limite de acionamento: quantos eventos de roda acumular antes de agir | `14` |
 
 ### Configuração de Zonas (Custom Zone Configuration)

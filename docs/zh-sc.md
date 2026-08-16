@@ -12,7 +12,7 @@
 
 * **零遮挡交互**：放弃传统的透明层遮盖，采用高性能坐标运算，完全不干扰进度条、按钮等原生 UI 点击。
 
-* **Mac / 高频滚轮优化**：内建过滤机制，完美适配 MOS、SmoothScroll 或 Mac 轨迹板，防止操作过敏跳动。
+* **自适应滚轮**：任何设备上「一格滚轮或一次滑动 = 恰好一次动作」——鼠标滚轮、触控板、平滑滚动软件（Mos、SmoothScroll、Logitech Options+）皆免调校自动适应；惯性尾巴自动抑制，蓄意长滑保持比例响应。
 
 ![DEMO SCREENSHOT](./demo.jpeg)
 
@@ -29,8 +29,10 @@
 | `OSD_DURATION` | OSD 提示在画面上停留的时间 (ms) | `800` |
 | `OSD_FADE_OUT` | OSD 淡出动画的持续时间 (ms) | `150` |
 | `OSD_FONT_SIZE` | OSD 提示文字的字体大小 (支持 px, em, rem 等) | `28px` |
-| `USE_WHEEL_COUNT_FIXED` | 是否开启固定滚轮计次过滤 (建议 Mac 用户开启) | `false` |
-| `WHEEL_DELAY` | 滚轮事件的防抖延迟时间 (ms) | `1` |
+| `ADAPTIVE_WHEEL` | 自适应滚轮：任何设备上一格/一滑 = 一次动作；设为 `false` 改用下方手动过滤设置 | `true` |
+| `WHEEL_STEP` | 自适应模式：每次动作所需的累积滚动量 (px)，调低更灵敏 | `100` |
+| `USE_WHEEL_COUNT_FIXED` | 仅手动模式：是否开启固定滚轮计次过滤 | `false` |
+| `WHEEL_DELAY` | 仅手动模式：滚轮事件的防抖延迟时间 (ms) | `1` |
 | `WHEEL_COUNT_THRESHOLD` | 滚轮计次触发门槛：累积多少次滚轮事件才执行一次动作 | `14` |
 
 ### 自定义区域配置 (Custom Zone Configuration)

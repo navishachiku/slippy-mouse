@@ -12,7 +12,7 @@ YouTube 플레이어 사용자를 위한 상호작용 강화 스크립트입니�
 
 * **제로 오버레이 상호작용 (Zero-Overlay)**: 기존의 투명 레이어 덮어쓰기 방식을 버리고 고성능 좌표 계산 방식을 채택하여 프로그레스 바나 버튼 등 기본 UI 클릭을 방해하지 않습니다.
 
-* **Mac / 고주파 휠 최적화**: 필터링 메커니즘이 내장되어 MOS, SmoothScroll 또는 Mac 트랙패드에 완벽하게 대응하며 과도한 민감도로 인한 튕김 현상을 방지합니다.
+* **적응형 휠**: 어떤 장치에서든 "휠 한 칸 또는 스와이프 한 번 = 정확히 한 번의 동작". 마우스 휠, 트랙패드, 부드러운 스크롤 소프트웨어(Mos, SmoothScroll, Logitech Options+)에 설정 없이 자동 적응합니다. 관성 꼬리는 억제되고 의도적인 긴 스와이프는 비례 반응을 유지합니다.
 
 ![DEMO SCREENSHOT](./demo.jpeg)
 
@@ -29,8 +29,10 @@ YouTube 플레이어 사용자를 위한 상호작용 강화 스크립트입니�
 | `OSD_DURATION` | OSD 알림이 화면에 머무는 시간 (ms) | `800` |
 | `OSD_FADE_OUT` | OSD 서서히 사라지는 애니메이션 시간 (ms) | `150` |
 | `OSD_FONT_SIZE` | OSD 텍스트 글꼴 크기 (px, em, rem 등 지원) | `28px` |
-| `USE_WHEEL_COUNT_FIXED` | 고정 휠 카운트 필터링 사용 여부 (Mac 사용자 권장) | `false` |
-| `WHEEL_DELAY` | 휠 이벤트 디바운스 지연 시간 (ms) | `1` |
+| `ADAPTIVE_WHEEL` | 적응형 휠: 어떤 장치에서든 한 칸/한 스와이프 = 한 동작. `false`로 설정하면 아래의 수동 필터링 설정 사용 | `true` |
+| `WHEEL_STEP` | 적응형 모드: 동작 한 번에 필요한 누적 스크롤 양 (px). 낮출수록 민감해짐 | `100` |
+| `USE_WHEEL_COUNT_FIXED` | 수동 모드 전용: 고정 휠 카운트 필터링 사용 여부 | `false` |
+| `WHEEL_DELAY` | 수동 모드 전용: 휠 이벤트 디바운스 지연 시간 (ms) | `1` |
 | `WHEEL_COUNT_THRESHOLD` | 휠 카운트 트리거 임계값: 동작 실행 전 누적할 휠 이벤트 수 | `14` |
 
 ### 커스텀 영역 설정 (Custom Zone Configuration)

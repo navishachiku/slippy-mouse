@@ -16,7 +16,7 @@ An interaction enhancement script for the YouTube player designed for power user
 
 * **Zero-Overlay Interaction**: Abandons traditional transparent layer overlays and uses high-performance coordinate calculations, ensuring no interference with native UI clicks like progress bars and buttons.
 
-* **Mac / High-Frequency Wheel Optimization**: Built-in filtering mechanism perfectly adapts to MOS, SmoothScroll, or Mac trackpads, preventing over-sensitive jumps during operation.
+* **Adaptive Wheel**: One physical notch or swipe equals exactly one action on any device — mouse wheels, trackpads, and smooth-scrolling software (Mos, SmoothScroll, Logitech Options+) — with no tuning required. Inertia tails are suppressed and deliberate long swipes stay proportional.
 
 ![DEMO SCREENSHOT](./docs/demo.jpeg)
 
@@ -33,8 +33,10 @@ You can adjust settings directly in the `SETTINGS` and `CONFIG` blocks at the to
 | `OSD_DURATION` | How long OSD prompts stay on screen (ms) | `800` |
 | `OSD_FADE_OUT` | Duration of OSD fade-out animation (ms) | `150` |
 | `OSD_FONT_SIZE` | Font size of OSD prompt text (supports px, em, rem, etc.) | `28px` |
-| `USE_WHEEL_COUNT_FIXED` | Whether to enable fixed wheel count filtering (Recommended for Mac users) | `false` |
-| `WHEEL_DELAY` | Debounce delay time for wheel events (ms) | `1` |
+| `ADAPTIVE_WHEEL` | Adaptive wheel filtering: one physical notch/swipe = one action on any device. Set to `false` to use the manual filtering settings below | `true` |
+| `WHEEL_STEP` | Adaptive mode: accumulated scroll (px) per action; lower it for finer response | `100` |
+| `USE_WHEEL_COUNT_FIXED` | Manual mode only: whether to enable fixed wheel count filtering | `false` |
+| `WHEEL_DELAY` | Manual mode only: debounce delay time for wheel events (ms) | `1` |
 | `WHEEL_COUNT_THRESHOLD` | Wheel count trigger threshold: how many wheel events to accumulate before performing an action | `14` |
 
 ### Custom Zone Configuration

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Mouse Master
 // @namespace    https://github.com/navishachiku/youtube-mouse-master
-// @version      0.7
+// @version      0.8
 // @description  High-performance YouTube & Bilibili player interaction script: support three-zone control, progress seek, prevent event penetration, high-frequency wheel filtering, and fix OSD timer conflicts.
 // @author       navishachiku & Gemini
 // @match        *://www.youtube.com/*

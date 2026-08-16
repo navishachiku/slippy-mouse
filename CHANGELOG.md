@@ -2,6 +2,11 @@
 
 All notable changes to the **YouTube Mouse Master** project will be documented in this file.
 
+## [0.8.0] - 2026-08-16
+
+### Added
+- **Adaptive Wheel (`ADAPTIVE_WHEEL`)**: New default wheel filtering that maps one physical notch or swipe to exactly one action on any device — mouse wheels, trackpads, and smooth-scrolling software (Mos, SmoothScroll, Logitech Options+) — with no configuration. The wheel stream is segmented into impulses whose accumulated travel fires one action per `WHEEL_STEP`; inertia and amplifier tails are suppressed, deliberate long swipes stay proportional, and bare macOS wheel notches settle instantly. Set `ADAPTIVE_WHEEL: false` to fall back to the previous manual filtering (`USE_WHEEL_COUNT_FIXED`).
+
 ## [0.7.0] - 2026-08-16
 
 ### Added

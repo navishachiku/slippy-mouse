@@ -12,7 +12,7 @@ Script de mejora de interacción para el reproductor de YouTube diseñado para u
 
 * **Interacción sin Capas (Zero-Overlay)**: Abandona las capas transparentes tradicionales y utiliza cálculos de coordenadas de alto rendimiento, asegurando que no haya interferencias con los clics de la interfaz nativa.
 
-* **Optimización para Mac / Rueda de Alta Frecuencia**: El mecanismo de filtrado integrado se adapta perfectamente a MOS, SmoothScroll o trackpads de Mac, evitando saltos excesivos por sensibilidad.
+* **Rueda Adaptativa**: Un clic físico de la rueda o un deslizamiento equivale exactamente a una acción en cualquier dispositivo — ruedas de ratón, trackpads y software de desplazamiento suave (Mos, SmoothScroll, Logitech Options+) — sin necesidad de ajustes. Las colas de inercia se suprimen y los deslizamientos largos deliberados mantienen una respuesta proporcional.
 
 ![DEMO SCREENSHOT](./demo.jpeg)
 
@@ -29,8 +29,10 @@ Puedes ajustar la configuración directamente en los bloques `SETTINGS` y `CONFI
 | `OSD_DURATION` | Tiempo que los avisos OSD permanecen en pantalla (ms) | `800` |
 | `OSD_FADE_OUT` | Duración de la animación de desvanecimiento OSD (ms) | `150` |
 | `OSD_FONT_SIZE` | Tamaño de fuente del texto OSD (soporta px, em, rem, etc.) | `28px` |
-| `USE_WHEEL_COUNT_FIXED` | Si se debe activar el filtrado de recuento de rueda fijo (Recomendado para Mac) | `false` |
-| `WHEEL_DELAY` | Tiempo de retraso de antivibración para eventos de rueda (ms) | `1` |
+| `ADAPTIVE_WHEEL` | Rueda adaptativa: un clic/deslizamiento = una acción en cualquier dispositivo. Establécelo en `false` para usar la configuración manual de abajo | `true` |
+| `WHEEL_STEP` | Modo adaptativo: desplazamiento acumulado (px) por acción; redúcelo para una respuesta más fina | `100` |
+| `USE_WHEEL_COUNT_FIXED` | Solo modo manual: si se debe activar el filtrado de recuento de rueda fijo | `false` |
+| `WHEEL_DELAY` | Solo modo manual: tiempo de retraso de antivibración para eventos de rueda (ms) | `1` |
 | `WHEEL_COUNT_THRESHOLD` | Umbral de activación: cuántos eventos de rueda acumular antes de actuar | `14` |
 
 ### Configuración de Zonas (Custom Zone Configuration)
