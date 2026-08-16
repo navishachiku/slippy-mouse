@@ -27,6 +27,21 @@
         OSD_FONT_SIZE: '28px',         // Font size of OSD prompt text (supports px, em, rem, etc.)
 
         // Wheel filtering settings
+        // ADAPTIVE_WHEEL (自適應滾輪): one physical notch or swipe maps to one
+        // action regardless of device or smoothing software (trackpads, Mos,
+        // SmoothScroll, Logitech Options+), with no configuration needed.
+        // Set to false to fall back to manual filtering via USE_WHEEL_COUNT_FIXED.
+        ADAPTIVE_WHEEL: true,
+
+        // Adaptive tuning (only used when ADAPTIVE_WHEEL is true)
+        WHEEL_STEP: 100,               // Accumulated scroll (normalized px) per action; one wheel notch ~ 100-120
+        GESTURE_GAP: 150,              // Silence (ms) after which input counts as a new gesture
+        MIN_ACTION_INTERVAL: 80,       // Minimum ms between two fired actions (caps burst damage)
+        IMPULSE_MIN: 20,               // Minimum impulse travel (px) to settle as one action; filters accidental grazes
+        REACCEL_FACTOR: 1.5,           // Magnitude jump ratio that marks a fresh notch inside a decaying tail
+        DISCRETE_SETTLE: 60,           // Settle delay (ms) for 1-2 event impulses (bare wheel notch without smoothing)
+
+        // Manual filtering (only used when ADAPTIVE_WHEEL is false)
         // If you are using Mac/MOS/Trackpad or software like Smooth Scroll (Mos, Logitech Options+), set USE_WHEEL_COUNT_FIXED to true
         USE_WHEEL_COUNT_FIXED: false,  // Whether to enable fixed wheel count filtering
         WHEEL_DELAY: 1,                // Debounce delay time for wheel events (ms)
@@ -190,6 +205,171 @@
     // State variables
     let lastWheelTime = 0;
     let wheelCount = 0;
+
+    // Adaptive wheel filter state (WHEEL_MODE: 'auto')
+    const wheelState = {
+        accum: 0,          // accumulated scroll distance toward the next action
+        fired: 0,          // actions fired within the current impulse
+        events: 0,         // wheel events seen within the current impulse
+        lastTime: 0,       // timestamp of the previous wheel event
+        lastDir: 0,        // sign of the previous deltaY
+        lastMag: 0,        // magnitude of the previous deltaY
+        peakMag: 0,        // largest magnitude seen in the current impulse
+        decaying: false,   // true while the stream looks like a decay tail
+        lastActionTime: 0, // timestamp of the last fired action
+        history: [],       // recent magnitudes, for decay detection
+        flushTimer: null   // pending end-of-impulse settlement
+    };
+
+    /**
+     * Reset per-impulse state (accumulator, decay tracking).
+     *
+     * @param {Object} s The wheel filter state.
+     */
+    function resetImpulse(s) {
+        s.accum = 0;
+        s.fired = 0;
+        s.events = 0;
+        s.peakMag = 0;
+        s.decaying = false;
+        s.history = [];
+    }
+
+    /**
+     * Whether a finished impulse should settle as one action.
+     * A dense stream (trackpad, smooth-scroll interpolation) needs IMPULSE_MIN
+     * of travel; a 1-2 event impulse is a bare wheel notch, which is
+     * unambiguous intent no matter how small macOS scroll acceleration made
+     * its delta — only sub-3px noise is discarded.
+     *
+     * @param {Object} s The wheel filter state.
+     *
+     * @returns {boolean} True if the impulse qualifies.
+     */
+    function impulseQualifies(s) {
+        if (s.fired !== 0) return false;
+        return s.accum >= SETTINGS.IMPULSE_MIN || (s.events <= 2 && s.accum >= 3);
+    }
+
+    /**
+     * Settle a finished impulse: if it accumulated meaningful travel but never
+     * reached a full step, it still represents one intentional notch — fire once.
+     *
+     * @param {Object} s The wheel filter state.
+     * @param {Function} fire Callback that performs the pending action.
+     */
+    function settleImpulse(s, fire) {
+        const now = performance.now();
+        if (impulseQualifies(s) && now - s.lastActionTime >= SETTINGS.MIN_ACTION_INTERVAL) {
+            s.lastActionTime = now;
+            fire();
+        }
+    }
+
+    /**
+     * Normalize a wheel event's deltaY to pixels regardless of deltaMode.
+     *
+     * @param {WheelEvent} e The wheel event.
+     *
+     * @returns {number} The delta in approximate pixels.
+     */
+    function normalizeWheelDelta(e) {
+        if (e.deltaMode === 1) return e.deltaY * 20;   // lines
+        if (e.deltaMode === 2) return e.deltaY * 800;  // pages
+        return e.deltaY;
+    }
+
+    /**
+     * Adaptive wheel filter: decide when this impulse should fire actions.
+     *
+     * Device-agnostic by design: instead of counting events, it accumulates
+     * scroll distance and fires once per WHEEL_STEP of travel, so smooth-scroll
+     * interpolation (many small deltas, same total) collapses back to one notch.
+     * The stream is segmented into impulses (one notch or one swipe): a pause
+     * longer than GESTURE_GAP, a direction change, or a magnitude jump inside a
+     * decaying tail (a fresh notch landing on the previous notch's tail) all
+     * start a new impulse. Interpolated notches are decaying curves, so an
+     * impulse that ends below a full step but above IMPULSE_MIN still settles
+     * as exactly one action — one physical notch is one step regardless of the
+     * distance the smoothing software assigns to it.
+     * Two guards bound the damage from delta-amplifying software and macOS
+     * momentum, which the web platform cannot expose directly (no momentumPhase
+     * equivalent on WheelEvent):
+     *   1. Decay suppression: once an impulse has fired, its decaying tail
+     *      stops accumulating, so inertia cannot queue extra actions.
+     *   2. Rate limit: at most one action per MIN_ACTION_INTERVAL ms, and the
+     *      accumulator is clamped so a burst can never bank future actions.
+     *
+     * @param {WheelEvent} e The wheel event.
+     * @param {Function} fire Callback that performs the zone action; invoked
+     *   synchronously on step crossings or deferred for end-of-impulse settling.
+     */
+    function autoWheelFilter(e, fire) {
+        const now = performance.now();
+        const d = normalizeWheelDelta(e);
+        const dir = d > 0 ? 1 : -1;
+        const mag = Math.abs(d);
+        const s = wheelState;
+
+        clearTimeout(s.flushTimer);
+
+        if (now - s.lastTime > SETTINGS.GESTURE_GAP || dir !== s.lastDir) {
+            // Pause or reversal: the previous impulse was already settled by the
+            // flush timer (or is being abandoned on reversal)
+            resetImpulse(s);
+        } else if (s.decaying && mag > s.lastMag * SETTINGS.REACCEL_FACTOR) {
+            // Fresh notch landed inside the previous notch's decaying tail
+            settleImpulse(s, fire);
+            resetImpulse(s);
+        }
+        s.lastTime = now;
+        s.lastDir = dir;
+        s.lastMag = mag;
+        s.events++;
+
+        s.history.push(mag);
+        if (s.history.length > 4) s.history.shift();
+        if (mag > s.peakMag) s.peakMag = mag;
+
+        if (!s.decaying && s.history.length >= 3) {
+            let nonIncreasing = true;
+            for (let i = 1; i < s.history.length; i++) {
+                if (s.history[i] > s.history[i - 1]) { nonIncreasing = false; break; }
+            }
+            // The 0.8 factor keeps steady equal-delta streams (trackpad plateau) alive
+            if (nonIncreasing && mag < s.peakMag * 0.8) s.decaying = true;
+        }
+
+        // A decay tail only stops accumulating once this impulse has fired;
+        // before that, the tail is the body of an interpolated notch and counts
+        if (!(s.decaying && s.fired > 0)) {
+            s.accum += mag;
+        }
+
+        if (s.accum >= SETTINGS.WHEEL_STEP) {
+            if (now - s.lastActionTime >= SETTINGS.MIN_ACTION_INTERVAL) {
+                s.accum -= SETTINGS.WHEEL_STEP;
+                // One oversized event may fire at most one action
+                s.accum = Math.min(s.accum, SETTINGS.WHEEL_STEP - 1);
+                s.fired++;
+                s.lastActionTime = now;
+                fire();
+            } else {
+                // Rate limited: hold at one pending step so a burst cannot bank actions
+                s.accum = SETTINGS.WHEEL_STEP;
+            }
+        }
+
+        // Arm end-of-impulse settlement for sub-step impulses. Bare notches
+        // (1-2 events) settle fast; a dense stream would re-arm within ~16ms
+        // anyway, so the short delay only ever elapses in silence.
+        if (impulseQualifies(s)) {
+            s.flushTimer = setTimeout(() => {
+                settleImpulse(s, fire);
+                resetImpulse(s);
+            }, s.events <= 2 ? SETTINGS.DISCRETE_SETTLE : SETTINGS.GESTURE_GAP);
+        }
+    }
     
     // Visual player element (DOM) — used for OSD attachment and zone visuals
     let player = null;
@@ -729,13 +909,26 @@
         player = visualElement;
         api = apiPlayer;
 
-        if (SETTINGS.USE_WHEEL_COUNT_FIXED) {
+        const actionKey = e.deltaY < 0 ? 'wheel_up' : 'wheel_down';
+        const cfg = zone.mouse_action[actionKey];
+        if (!cfg || !Actions[cfg.action]) return;
+
+        const doAction = () => {
+            // log(`[Action] Wheel trigger: ${cfg.action}`);
+            Actions[cfg.action](cfg.value);
+            if (api.showControls) api.showControls();
+        };
+
+        if (SETTINGS.ADAPTIVE_WHEEL) {
+            autoWheelFilter(e, doAction);
+        } else if (SETTINGS.USE_WHEEL_COUNT_FIXED) {
             wheelCount++;
             if (wheelCount < SETTINGS.WHEEL_COUNT_THRESHOLD) {
                 // console.log('[YTM Debug] Throttled by Count:', wheelCount);
                 return;
             }
             wheelCount = 0;
+            doAction();
         } else {
             const now = Date.now();
             if (now - lastWheelTime < SETTINGS.WHEEL_DELAY) {
@@ -743,15 +936,7 @@
                 return;
             }
             lastWheelTime = now;
-        }
-
-        const actionKey = e.deltaY < 0 ? 'wheel_up' : 'wheel_down';
-        const cfg = zone.mouse_action[actionKey];
-        
-        if (cfg && Actions[cfg.action]) {
-            // log(`[Action] Wheel trigger: ${cfg.action}`);
-            Actions[cfg.action](cfg.value);
-            if (api.showControls) api.showControls();
+            doAction();
         }
     }
 
