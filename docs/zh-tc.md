@@ -1,6 +1,8 @@
-# YouTube Mouse Master
+# Slippy Mouse
 
-針對高階使用者設計的 YouTube 播放器交互強化腳本。這是一款經過深度優化、零遮擋感且支援高度客製化的 Tampermonkey 腳本。
+![Slippy Mouse](./images/banner.png)
+
+為線上播放器打造的滑鼠增強工具：播放器上劃出三個感應區，只需在感應區用滑鼠**滾輪**便可以進行音量、播放倍率、快進等操作，絲滑順暢，不需要再記快捷鍵、也不需到處找按鈕，只需輕鬆一滾便能到位。並且也提供配置介面讓用戶可以自訂滾輪/點擊事件。
 
 ## ✨ 核心特色
 
@@ -20,7 +22,7 @@
 
 ## 🎛️ 設定面板
 
-不需要修改程式碼——點擊播放器控制列上的滑鼠圖示即可開啟設定面板（YouTube 與 B站的控制列都有）：
+不需要修改程式碼——點擊播放器控制列上的滑鼠圖示即可開啟設定面板：
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -90,20 +92,24 @@
 | `speed_up` | 增加播放倍速 | `0.25` |
 | `speed_down` | 減少播放倍速 | `0.25` |
 | `speed_set` | 設定固定播放倍速 | `1.0`, `2.0` 等 |
-| `none` | 不執行動作 | 會將事件放行給 YouTube 原生處理 |
+| `none` | 不執行動作 | 會將事件放行給網站原生處理 |
 
 </details>
 
 ## 📦 安裝方式
 
-**方法一：一鍵安裝（推薦）**
+**方法一：Userscript 一鍵安裝（推薦，支援所有主流瀏覽器）**
 
 1. 安裝瀏覽器擴充功能 [Tampermonkey](https://www.tampermonkey.net/)。
-2. 前往 **[GreasyFork 腳本頁面](https://greasyfork.org/en/scripts/566499-youtube-mouse-master)**。
+2. 前往 **[GreasyFork 腳本頁面](https://greasyfork.org/scripts/566499)**。
 3. 點擊 **「安裝此腳本」** 按鈕。
 
-**方法二：手動安裝**
+**方法二：瀏覽器擴充版**
+
+Microsoft Edge Add-ons 上架準備中；也可下載本 repo 的 `extension/` 目錄後，在瀏覽器的擴充功能頁開啟開發人員模式手動載入。
+
+**方法三：手動安裝 Userscript**
 
 1. 在 Tampermonkey 中點擊「新建腳本」。
-2. 複製 `YouTubeMouseMaster.user.js` 的完整內容並貼上。
+2. 複製 `SlippyMouse.user.js` 的完整內容並貼上。
 3. 儲存後即可使用！

@@ -1,6 +1,8 @@
-# YouTube Mouse Master
+# Slippy Mouse
 
-YouTube 플레이어 사용자를 위한 상호작용 강화 스크립트입니다. 고성능, 제로 오버레이(Zero-Overlay) 및 고도의 커스텀 기능을 지원하는 Tampermonkey 스크립트입니다.
+![Slippy Mouse](./images/banner.png)
+
+온라인 동영상 플레이어를 위한 마우스 강화 도구입니다. 플레이어를 3개의 감지 존으로 나누고, 존 안에서 마우스 **휠**만 굴리면 볼륨·재생 속도·탐색 등을 조작할 수 있습니다. 부드럽고 쾌적하며, 단축키를 외울 필요도 버튼을 찾을 필요도 없습니다. 가볍게 한 번 굴리면 끝. 휠/클릭 동작은 설정 패널에서 자유롭게 커스터마이즈할 수 있습니다.
 
 ## ✨ 주요 기능
 
@@ -20,7 +22,7 @@ YouTube 플레이어 사용자를 위한 상호작용 강화 스크립트입니�
 
 ## 🎛️ 설정 패널
 
-코드 수정이 필요 없습니다. 플레이어 컨트롤 바의 마우스 아이콘을 클릭하면 설정 패널이 열립니다(YouTube와 Bilibili 모두 지원):
+코드 수정이 필요 없습니다. 플레이어 컨트롤 바의 마우스 아이콘을 클릭하면 설정 패널이 열립니다:
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -90,20 +92,24 @@ YouTube 플레이어 사용자를 위한 상호작용 강화 스크립트입니�
 | `speed_up` | 재생 속도 증가 | `0.25` |
 | `speed_down` | 재생 속도 감소 | `0.25` |
 | `speed_set` | 고정 재생 속도 설정 | `1.0`, `2.0` 등 |
-| `none` | 아무 작업도 하지 않음 | 이벤트를 YouTube 기본 처리 방식으로 넘깁니다 |
+| `none` | 아무 작업도 하지 않음 | 이벤트를 사이트 기본 처리 방식으로 넘깁니다 |
 
 </details>
 
 ## 📦 설치 방법
 
-**방법 1: 원클릭 설치 (권장)**
+**방법 1: Userscript 원클릭 설치(권장, 모든 주요 브라우저 지원)**
 
 1. 브라우저 확장 프로그램 [Tampermonkey](https://www.tampermonkey.net/)를 설치합니다.
-2. **[GreasyFork 스크립트 페이지](https://greasyfork.org/en/scripts/566499-youtube-mouse-master)**를 방문합니다.
-3. **"이 스크립트 설치"** 버튼을 클릭합니다.
+2. **[GreasyFork 스크립트 페이지](https://greasyfork.org/scripts/566499)**로 이동합니다.
+3. **「이 스크립트 설치」** 버튼을 클릭합니다.
 
-**방법 2: 수동 설치**
+**방법 2: 브라우저 확장 버전**
 
-1. Tampermonkey에서 "새 스크립트 만들기"를 클릭합니다.
-2. `YouTubeMouseMaster.user.js`의 내용을 복사하여 붙여넣습니다.
-3. 저장하면 완료됩니다!
+Microsoft Edge Add-ons 등록 준비 중입니다. 이 repo의 `extension/` 디렉터리를 내려받아 브라우저 확장 페이지에서 개발자 모드를 켜고 수동으로 로드할 수도 있습니다.
+
+**방법 3: Userscript 수동 설치**
+
+1. Tampermonkey에서 「새 스크립트」를 만듭니다.
+2. `SlippyMouse.user.js`의 내용을 복사하여 붙여넣습니다.
+3. 저장하면 바로 사용할 수 있습니다!

@@ -1,6 +1,8 @@
-# YouTube Mouse Master
+# Slippy Mouse
 
-针对高阶用户设计的 YouTube 播放器交互强化脚本。这是一款经过深度优化、无遮挡感且支持高度客制化的 Tampermonkey 脚本。
+![Slippy Mouse](./images/banner.png)
+
+为在线播放器打造的鼠标增强工具：播放器上划出三个感应区，只需在感应区用鼠标**滚轮**便可以进行音量、播放倍率、快进等操作，丝滑顺畅，不需要再记快捷键、也不需到处找按钮，只需轻松一滚便能到位。并且也提供配置界面让用户可以自定义滚轮/点击事件。
 
 ## ✨ 核心特色
 
@@ -20,7 +22,7 @@
 
 ## 🎛️ 设置面板
 
-无需修改代码——点击播放器控制栏上的鼠标图标即可打开设置面板（YouTube 与 B站的控制栏都有）：
+无需修改代码——点击播放器控制栏上的鼠标图标即可打开设置面板：
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -90,20 +92,24 @@
 | `speed_up` | 增加播放倍速 | `0.25` |
 | `speed_down` | 减少播放倍速 | `0.25` |
 | `speed_set` | 设定固定播放倍速 | `1.0`, `2.0` 等 |
-| `none` | 不执行动作 | 会将事件放行给 YouTube 原生处理 |
+| `none` | 不执行动作 | 会将事件放行给网站原生处理 |
 
 </details>
 
 ## 📦 安装方式
 
-**方法一：一键安装（推荐）**
+**方法一：Userscript 一键安装（推荐，支持所有主流浏览器）**
 
 1. 安装浏览器扩展 [Tampermonkey](https://www.tampermonkey.net/)。
-2. 前往 **[GreasyFork 脚本页面](https://greasyfork.org/en/scripts/566499-youtube-mouse-master)**。
-3. 点击 **“安装此脚本”** 按钮。
+2. 前往 **[GreasyFork 脚本页面](https://greasyfork.org/scripts/566499)**。
+3. 点击 **「安装此脚本」** 按钮。
 
-**方法二：手动安装**
+**方法二：浏览器扩展版**
 
-1. 在 Tampermonkey 中点击“新建脚本”。
-2. 复制 `YouTubeMouseMaster.user.js` 的完整内容并粘贴。
+Microsoft Edge Add-ons 上架准备中；也可下载本 repo 的 `extension/` 目录后，在浏览器的扩展程序页开启开发者模式手动加载。
+
+**方法三：手动安装 Userscript**
+
+1. 在 Tampermonkey 中点击「新建脚本」。
+2. 复制 `SlippyMouse.user.js` 的完整内容并粘贴。
 3. 保存后即可使用！

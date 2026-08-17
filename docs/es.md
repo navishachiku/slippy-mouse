@@ -1,6 +1,8 @@
-# YouTube Mouse Master
+# Slippy Mouse
 
-Script de mejora de interacción para el reproductor de YouTube diseñado para usuarios avanzados. Es un script de Tampermonkey altamente optimizado, sin capas superpuestas (Zero-Overlay) y totalmente personalizable.
+![Slippy Mouse](./images/banner.png)
+
+Una herramienta de mejora del ratón para reproductores de vídeo online: el reproductor se divide en tres zonas y, dentro de cada zona, basta girar la **rueda** del ratón para ajustar volumen, velocidad de reproducción, avance y más — con total fluidez. Sin atajos que memorizar ni botones que buscar: un giro suave y listo. Un panel de configuración permite personalizar cada acción de rueda y clic.
 
 ## ✨ Características Principales
 
@@ -20,7 +22,7 @@ Script de mejora de interacción para el reproductor de YouTube diseñado para u
 
 ## 🎛️ Panel de Configuración
 
-Sin editar código — haz clic en el icono de ratón en la barra de controles del reproductor para abrir el panel (disponible en YouTube y Bilibili):
+Sin editar código — haz clic en el icono de ratón en la barra de controles del reproductor para abrir el panel de configuración:
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -90,20 +92,24 @@ En `mouse_action`, los tipos de `action` que puedes usar son:
 | `speed_up` | Aumentar velocidad | `0.25` |
 | `speed_down` | Disminuir velocidad | `0.25` |
 | `speed_set` | Establecer velocidad fija | `1.0`, `2.0`, etc. |
-| `none` | Ninguna acción | Pasa el evento al manejo nativo de YouTube |
+| `none` | Ninguna acción | Pasa el evento al manejo nativo del sitio |
 
 </details>
 
 ## 📦 Instalación
 
-**Método 1: Instalación con un clic (Recomendado)**
+**Método 1: Instalación del Userscript con un clic (recomendado, funciona en los principales navegadores)**
 
-1. Instala la extensión del navegador [Tampermonkey](https://www.tampermonkey.net/).
-2. Visita la **[página del script en GreasyFork](https://greasyfork.org/en/scripts/566499-youtube-mouse-master)**.
+1. Instala la extensión de navegador [Tampermonkey](https://www.tampermonkey.net/).
+2. Visita la **[página del script en GreasyFork](https://greasyfork.org/scripts/566499)**.
 3. Haz clic en el botón **"Instalar este script"**.
 
-**Método 2: Instalación manual**
+**Método 2: Versión de extensión de navegador**
 
-1. Crea un "Nuevo script" en Tampermonkey.
-2. Copia y pega el contenido de `YouTubeMouseMaster.user.js`.
+El listado en Microsoft Edge Add-ons está en preparación. También puedes descargar el directorio `extension/` de este repo y cargarlo manualmente desde la página de extensiones del navegador con el Modo de desarrollador activado.
+
+**Método 3: Instalación manual del Userscript**
+
+1. Crea un "Nuevo Script" en Tampermonkey.
+2. Copia y pega el contenido de `SlippyMouse.user.js`.
 3. ¡Guarda y disfruta!
