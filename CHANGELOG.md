@@ -1,6 +1,14 @@
 # Changelog
 
-All notable changes to the **YouTube Mouse Master** project will be documented in this file.
+All notable changes to the **Slippy Mouse** project (formerly YouTube Mouse Master) will be documented in this file.
+
+## [1.0.0] - 2026-08-17
+
+### Changed
+- **Renamed to Slippy Mouse** (formerly YouTube Mouse Master). The script file is now `SlippyMouse.user.js`; the update URL and script identity on GreasyFork are unchanged, so existing installs keep updating normally.
+
+### Added
+- **Browser extension (Manifest V3)**: The same script now ships as a browser extension under `extension/`, running as a MAIN-world content script — identical behavior to the userscript, including settings stored in the same place. Packaged for the Microsoft Edge Add-ons store.
 
 ## [0.9.0] - 2026-08-17
 
