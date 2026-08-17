@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Slippy Mouse for YouTube & Bilibili",
+    "version": "1.0.0",
+    "description": "Three-zone mouse control for YouTube & Bilibili players: volume, seek, and speed via clicks and wheel. Adaptive, zero-overlay.",
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://www.youtube.com/*", "*://www.bilibili.com/*"],
+            "js": ["content.js"],
+            "run_at": "document_start",
+            "world": "MAIN"
+        }
+    ]
+}

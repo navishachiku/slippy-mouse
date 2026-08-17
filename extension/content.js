@@ -1,15 +1,3 @@
-// ==UserScript==
-// @name         YouTube Mouse Master
-// @namespace    https://github.com/navishachiku/youtube-mouse-master
-// @version      0.9
-// @description  High-performance YouTube & Bilibili player interaction script: support three-zone control, progress seek, prevent event penetration, high-frequency wheel filtering, and fix OSD timer conflicts.
-// @author       navishachiku & Gemini
-// @match        *://www.youtube.com/*
-// @match        *://www.bilibili.com/*
-// @grant        none
-// @run-at       document-start
-// ==/UserScript==
-
 (function () {
     'use strict';
 
@@ -919,7 +907,7 @@
 
     const I18N = {
         en: {
-            title: 'Mouse Master Settings', tabGeneral: 'General', tabZones: 'Zone Actions', tabWheel: 'Wheel', tabAdvanced: 'Advanced',
+            title: 'Slippy Mouse Settings', tabGeneral: 'General', tabZones: 'Zone Actions', tabWheel: 'Wheel', tabAdvanced: 'Advanced',
             secCore: 'Core', adaptive: 'Adaptive wheel', adaptiveDesc: 'One notch or swipe equals exactly one action on any device. Turn off to use manual filtering in the Wheel tab.',
             zoneKey: 'Zone overlay hotkey', zoneKeyDesc: 'Shows the three zones and their actions on the player.', panelKey: 'Settings panel hotkey', pressKey: 'Press a key…', notSet: 'Not set',
             theme: 'Appearance', themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark',
@@ -938,7 +926,7 @@
             toastSaved: 'Saved', toastReset: 'Defaults restored', toastImported: 'Settings imported', importError: 'Import failed: invalid file'
         },
         'zh-TW': {
-            title: 'Mouse Master 設定', tabGeneral: '一般', tabZones: '區域動作', tabWheel: '滾輪', tabAdvanced: '進階',
+            title: 'Slippy Mouse 設定', tabGeneral: '一般', tabZones: '區域動作', tabWheel: '滾輪', tabAdvanced: '進階',
             secCore: '核心', adaptive: '自適應滾輪', adaptiveDesc: '任何裝置上一格滾輪或一次滑動＝恰好一次動作。關閉後改用「滾輪」分頁的手動過濾。',
             zoneKey: '區域顯示熱鍵', zoneKeyDesc: '在播放器上顯示三區範圍與動作對照。', panelKey: '設定面板熱鍵', pressKey: '請按任意鍵…', notSet: '未設定',
             theme: '外觀', themeAuto: '自動', themeLight: '淺色', themeDark: '深色',
@@ -957,7 +945,7 @@
             toastSaved: '已儲存', toastReset: '已回復預設值', toastImported: '已匯入設定', importError: '匯入失敗：檔案格式錯誤'
         },
         'zh-CN': {
-            title: 'Mouse Master 设置', tabGeneral: '常规', tabZones: '区域动作', tabWheel: '滚轮', tabAdvanced: '高级',
+            title: 'Slippy Mouse 设置', tabGeneral: '常规', tabZones: '区域动作', tabWheel: '滚轮', tabAdvanced: '高级',
             secCore: '核心', adaptive: '自适应滚轮', adaptiveDesc: '任何设备上一格滚轮或一次滑动＝恰好一次动作。关闭后改用“滚轮”选项卡的手动过滤。',
             zoneKey: '区域显示热键', zoneKeyDesc: '在播放器上显示三区范围与动作对照。', panelKey: '设置面板热键', pressKey: '请按任意键…', notSet: '未设置',
             theme: '外观', themeAuto: '自动', themeLight: '浅色', themeDark: '深色',
@@ -976,7 +964,7 @@
             toastSaved: '已保存', toastReset: '已恢复默认值', toastImported: '已导入设置', importError: '导入失败：文件格式错误'
         },
         ja: {
-            title: 'Mouse Master 設定', tabGeneral: '一般', tabZones: 'ゾーン操作', tabWheel: 'ホイール', tabAdvanced: '詳細',
+            title: 'Slippy Mouse 設定', tabGeneral: '一般', tabZones: 'ゾーン操作', tabWheel: 'ホイール', tabAdvanced: '詳細',
             secCore: 'コア', adaptive: 'アダプティブホイール', adaptiveDesc: 'どのデバイスでもノッチ1回・スワイプ1回＝ちょうど1アクション。オフにすると「ホイール」タブの手動フィルタリングを使用します。',
             zoneKey: 'ゾーン表示ホットキー', zoneKeyDesc: 'プレイヤー上に3ゾーンと操作の対応を表示します。', panelKey: '設定パネルホットキー', pressKey: 'キーを押してください…', notSet: '未設定',
             theme: '外観', themeAuto: '自動', themeLight: 'ライト', themeDark: 'ダーク',
@@ -995,7 +983,7 @@
             toastSaved: '保存しました', toastReset: 'デフォルトに戻しました', toastImported: '設定をインポートしました', importError: 'インポート失敗：ファイル形式が不正です'
         },
         ko: {
-            title: 'Mouse Master 설정', tabGeneral: '일반', tabZones: '존 동작', tabWheel: '휠', tabAdvanced: '고급',
+            title: 'Slippy Mouse 설정', tabGeneral: '일반', tabZones: '존 동작', tabWheel: '휠', tabAdvanced: '고급',
             secCore: '핵심', adaptive: '적응형 휠', adaptiveDesc: '어떤 장치에서든 한 칸/한 스와이프＝정확히 한 번의 동작. 끄면 "휠" 탭의 수동 필터링을 사용합니다.',
             zoneKey: '존 표시 단축키', zoneKeyDesc: '플레이어에 3개 존과 동작 대응을 표시합니다.', panelKey: '설정 패널 단축키', pressKey: '키를 누르세요…', notSet: '설정 안 함',
             theme: '모양', themeAuto: '자동', themeLight: '라이트', themeDark: '다크',
@@ -1014,7 +1002,7 @@
             toastSaved: '저장됨', toastReset: '기본값 복원됨', toastImported: '설정 가져옴', importError: '가져오기 실패: 잘못된 파일'
         },
         pt: {
-            title: 'Configurações do Mouse Master', tabGeneral: 'Geral', tabZones: 'Ações de Zona', tabWheel: 'Roda', tabAdvanced: 'Avançado',
+            title: 'Configurações do Slippy Mouse', tabGeneral: 'Geral', tabZones: 'Ações de Zona', tabWheel: 'Roda', tabAdvanced: 'Avançado',
             secCore: 'Essencial', adaptive: 'Roda adaptativa', adaptiveDesc: 'Um clique ou deslize equivale exatamente a uma ação em qualquer dispositivo. Desative para usar a filtragem manual na aba Roda.',
             zoneKey: 'Atalho de exibição de zonas', zoneKeyDesc: 'Mostra as três zonas e suas ações no player.', panelKey: 'Atalho do painel de configurações', pressKey: 'Pressione uma tecla…', notSet: 'Não definido',
             theme: 'Aparência', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Escuro',
@@ -1033,7 +1021,7 @@
             toastSaved: 'Salvo', toastReset: 'Padrões restaurados', toastImported: 'Configurações importadas', importError: 'Falha na importação: arquivo inválido'
         },
         es: {
-            title: 'Configuración de Mouse Master', tabGeneral: 'General', tabZones: 'Acciones de Zona', tabWheel: 'Rueda', tabAdvanced: 'Avanzado',
+            title: 'Configuración de Slippy Mouse', tabGeneral: 'General', tabZones: 'Acciones de Zona', tabWheel: 'Rueda', tabAdvanced: 'Avanzado',
             secCore: 'Esencial', adaptive: 'Rueda adaptativa', adaptiveDesc: 'Un clic o deslizamiento equivale exactamente a una acción en cualquier dispositivo. Desactívala para usar el filtrado manual en la pestaña Rueda.',
             zoneKey: 'Atajo de visualización de zonas', zoneKeyDesc: 'Muestra las tres zonas y sus acciones en el reproductor.', panelKey: 'Atajo del panel de configuración', pressKey: 'Pulsa una tecla…', notSet: 'Sin asignar',
             theme: 'Apariencia', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Oscuro',
@@ -1758,7 +1746,7 @@
         const barHost = cb && document.querySelector(cb.host);
         if (barHost) {
             const btn = document.createElement('button');
-            btn.title = 'Mouse Master';
+            btn.title = 'Slippy Mouse';
             if (SITE === 'youtube') {
                 // .ytp-button provides the box size and hover behavior across
                 // YouTube's size modes; flex-center a proportional glyph inside
@@ -1799,7 +1787,7 @@
         if (!player || !player.appendChild) return;
         const btn = document.createElement('button');
         btn.className = 'ytmm-settings-btn';
-        btn.title = 'Mouse Master';
+        btn.title = 'Slippy Mouse';
         Object.assign(btn.style, {
             position: 'absolute', top: '12px', right: '12px',
             width: '30px', height: '30px', borderRadius: '50%',
