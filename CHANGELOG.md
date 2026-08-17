@@ -2,6 +2,11 @@
 
 All notable changes to the **Slippy Mouse** project (formerly YouTube Mouse Master) will be documented in this file.
 
+## [1.0.1] - 2026-08-17
+
+### Changed
+- Updated the userscript metadata description to the new brand copy shown on GreasyFork.
+
 ## [1.0.0] - 2026-08-17
 
 ### Changed

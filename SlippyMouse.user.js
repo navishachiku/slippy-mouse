@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Slippy Mouse
 // @namespace    https://github.com/navishachiku/youtube-mouse-master
-// @version      1.0
-// @description  High-performance YouTube & Bilibili player interaction script: support three-zone control, progress seek, prevent event penetration, high-frequency wheel filtering, and fix OSD timer conflicts.
+// @version      1.0.1
+// @description  Slippery when scrolled. Three-zone mouse control for video players: scroll to adjust volume, seek, and playback speed on YouTube & Bilibili. Fully customizable via an in-page settings panel.
 // @author       navishachiku & Gemini
 // @match        *://www.youtube.com/*
 // @match        *://www.bilibili.com/*
