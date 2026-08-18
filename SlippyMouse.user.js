@@ -1278,10 +1278,10 @@
         main { flex: 1; overflow-y: auto; padding: 20px 24px 28px; }
         .pane { display: none; }
         .pane.on { display: block; }
-        h2 { font-size: 12px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.09em; margin: 22px 0 6px; }
+        h2 { font-size: 12px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.09em; margin: 34px 0 8px; }
         h2:first-child { margin-top: 0; }
-        .row { display: flex; align-items: center; gap: 16px; padding: 13px 2px; border-bottom: 1px solid var(--hairline); }
-        .row:last-child { border-bottom: none; }
+        .row { display: flex; align-items: center; gap: 16px; padding: 13px 2px; }
+        .row + .row { border-top: 1px solid var(--hairline); }
         .row .info { flex: 1; min-width: 0; }
         .row .label { font-size: 14px; font-weight: 500; }
         .row .desc { font-size: 12px; color: var(--text-2); margin-top: 1px; }
@@ -1320,8 +1320,8 @@
         .zonebar .zhandle .grip { width: 4px; height: 26px; border-radius: 2px; background: var(--zone-label); opacity: 0.45; transition: opacity 0.12s, background 0.12s; }
         .zonebar .zhandle:hover .grip, .zonebar .zhandle.drag .grip { background: var(--accent); opacity: 1; }
         .geom-note { font-size: 11.5px; color: var(--text-3); margin-bottom: 10px; }
-        .arow { display: flex; align-items: center; gap: 10px; padding: 9px 2px; border-bottom: 1px solid var(--hairline); }
-        .arow:last-child { border-bottom: none; }
+        .arow { display: flex; align-items: center; gap: 10px; padding: 9px 2px; }
+        .arow + .arow { border-top: 1px solid var(--hairline); }
         .arow .ic { width: 76px; flex-shrink: 0; font-size: 12.5px; color: var(--text-2); }
         .arow select { flex: 1; }
         .arow input[type="text"] { flex: 1; min-width: 0; }
