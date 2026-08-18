@@ -18,11 +18,13 @@
 
 * **图形化设置面板**：所有参数与区域动作映射都能在页内面板中调整，设置即时生效并保存在浏览器中——脚本更新不会丢失。
 
-![DEMO SCREENSHOT](./images/demo.jpeg)
+![DEMO](./images/demo.webp)
 
 ## 🎛️ 设置面板
 
 无需修改代码——点击播放器控制栏上的鼠标图标即可打开设置面板：
+
+![设置面板入口](./images/settings-entry.png)
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -113,3 +115,7 @@ Microsoft Edge Add-ons 上架准备中；也可下载本 repo 的 `extension/` �
 1. 在 Tampermonkey 中点击「新建脚本」。
 2. 复制 `SlippyMouse.user.js` 的完整内容并粘贴。
 3. 保存后即可使用！
+
+---
+
+*演示背景视频：[Ireland 4K: Nature Relaxation, Cliffs of Moher & Emerald Landscapes](https://www.youtube.com/watch?v=MSSkVk0em2Y) — Scenic 4K by John（知识共享署名许可）*

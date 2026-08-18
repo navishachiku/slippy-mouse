@@ -18,11 +18,13 @@ Uma ferramenta de aprimoramento de mouse para players de vídeo online: o player
 
 * **Painel de Configurações Gráfico**: Todos os parâmetros e mapeamentos de ações de zona podem ser ajustados em um painel na página — as alterações se aplicam na hora e ficam salvas no navegador, então atualizações do script nunca apagam suas personalizações.
 
-![DEMO SCREENSHOT](./images/demo.jpeg)
+![DEMO](./images/demo.webp)
 
 ## 🎛️ Painel de Configurações
 
 Sem edição de código — clique no ícone de mouse na barra de controles do player para abrir o painel de configurações:
+
+![Entrada do painel de configurações](./images/settings-entry.png)
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -113,3 +115,7 @@ A listagem na Microsoft Edge Add-ons está em preparação. Você também pode b
 1. Crie um "Novo Script" no Tampermonkey.
 2. Copie e cole o conteúdo de `SlippyMouse.user.js`.
 3. Salve e aproveite!
+
+---
+
+*Filmagem de fundo da demo: [Ireland 4K: Nature Relaxation, Cliffs of Moher & Emerald Landscapes](https://www.youtube.com/watch?v=MSSkVk0em2Y) — Scenic 4K by John (licença Creative Commons Atribuição).*

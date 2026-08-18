@@ -18,11 +18,13 @@ Una herramienta de mejora del ratón para reproductores de vídeo online: el rep
 
 * **Panel de Configuración Gráfico**: Todos los parámetros y asignaciones de acciones de zona se pueden ajustar en un panel dentro de la página — los cambios se aplican al instante y se guardan en el navegador, así que las actualizaciones del script nunca borran tus personalizaciones.
 
-![DEMO SCREENSHOT](./images/demo.jpeg)
+![DEMO](./images/demo.webp)
 
 ## 🎛️ Panel de Configuración
 
 Sin editar código — haz clic en el icono de ratón en la barra de controles del reproductor para abrir el panel de configuración:
+
+![Acceso al panel de configuración](./images/settings-entry.png)
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -113,3 +115,7 @@ El listado en Microsoft Edge Add-ons está en preparación. También puedes desc
 1. Crea un "Nuevo Script" en Tampermonkey.
 2. Copia y pega el contenido de `SlippyMouse.user.js`.
 3. ¡Guarda y disfruta!
+
+---
+
+*Metraje de fondo de la demo: [Ireland 4K: Nature Relaxation, Cliffs of Moher & Emerald Landscapes](https://www.youtube.com/watch?v=MSSkVk0em2Y) — Scenic 4K by John (licencia Creative Commons Atribución).*

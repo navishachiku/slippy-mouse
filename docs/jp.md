@@ -18,11 +18,13 @@
 
 * **グラフィカル設定パネル**: すべてのパラメータとゾーン操作の割り当てをページ内パネルで調整できます。設定は即時反映され、ブラウザに保存されるため、スクリプト更新後も失われません。
 
-![DEMO SCREENSHOT](./images/demo.jpeg)
+![DEMO](./images/demo.webp)
 
 ## 🎛️ 設定パネル
 
 コードの編集は不要です。プレイヤーのコントロールバーにあるマウスアイコンをクリックすると設定パネルが開きます：
+
+![設定パネルの入り口](./images/settings-entry.png)
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -113,3 +115,7 @@ Microsoft Edge Add-ons は公開準備中です。本リポジトリの `extensi
 1. Tampermonkey で「新規スクリプト」を作成します。
 2. `SlippyMouse.user.js` の内容をコピーして貼り付けます。
 3. 保存すれば完了です！
+
+---
+
+*デモ背景映像：[Ireland 4K: Nature Relaxation, Cliffs of Moher & Emerald Landscapes](https://www.youtube.com/watch?v=MSSkVk0em2Y) — Scenic 4K by John（クリエイティブ・コモンズ 表示ライセンス）*

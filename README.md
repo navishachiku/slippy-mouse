@@ -22,11 +22,13 @@ A mouse enhancement tool for online video players: the player is divided into th
 
 * **Graphical Settings Panel**: Every parameter and zone-action mapping can be adjusted in an in-page panel — changes apply instantly and are stored in the browser, so script updates never wipe your customizations.
 
-![DEMO SCREENSHOT](./docs/images/demo.jpeg)
+![DEMO](./docs/images/demo.webp)
 
 ## 🎛️ Settings Panel
 
 No code editing required — click the mouse icon on the player control bar to open the settings panel:
+
+![Settings entry](./docs/images/settings-entry.png)
 
 ![Settings Panel](./docs/images/settings-general.png)
 
@@ -117,3 +119,7 @@ The Microsoft Edge Add-ons listing is in preparation. You can also download this
 1. Create a "New Script" in Tampermonkey.
 2. Copy and paste the content of `SlippyMouse.user.js`.
 3. Save and enjoy!
+
+---
+
+*Demo background footage: [Ireland 4K: Nature Relaxation, Cliffs of Moher & Emerald Landscapes](https://www.youtube.com/watch?v=MSSkVk0em2Y) — Scenic 4K by John (Creative Commons Attribution license).*

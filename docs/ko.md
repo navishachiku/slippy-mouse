@@ -18,11 +18,13 @@
 
 * **그래픽 설정 패널**: 모든 매개변수와 존 동작 매핑을 페이지 내 패널에서 조정할 수 있습니다. 설정은 즉시 적용되고 브라우저에 저장되어 스크립트 업데이트 후에도 유지됩니다.
 
-![DEMO SCREENSHOT](./images/demo.jpeg)
+![DEMO](./images/demo.webp)
 
 ## 🎛️ 설정 패널
 
 코드 수정이 필요 없습니다. 플레이어 컨트롤 바의 마우스 아이콘을 클릭하면 설정 패널이 열립니다:
+
+![설정 패널 진입점](./images/settings-entry.png)
 
 ![Settings Panel](./images/settings-general.png)
 
@@ -113,3 +115,7 @@ Microsoft Edge Add-ons 등록 준비 중입니다. 이 repo의 `extension/` 디�
 1. Tampermonkey에서 「새 스크립트」를 만듭니다.
 2. `SlippyMouse.user.js`의 내용을 복사하여 붙여넣습니다.
 3. 저장하면 바로 사용할 수 있습니다!
+
+---
+
+*데모 배경 영상: [Ireland 4K: Nature Relaxation, Cliffs of Moher & Emerald Landscapes](https://www.youtube.com/watch?v=MSSkVk0em2Y) — Scenic 4K by John (크리에이티브 커먼즈 저작자표시 라이선스)*
