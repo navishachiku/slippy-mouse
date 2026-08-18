@@ -999,7 +999,7 @@
             secMisc: 'Misc', debug: 'Debug logging', debugDesc: 'Log event details to the console for bug reports.',
             secData: 'Settings data', exportImport: 'Export / Import', exportImportDesc: 'Back up or move all settings as JSON.', btnExport: 'Export', btnImport: 'Import',
             reset: 'Restore defaults', resetDesc: 'Clear all customizations.', btnReset: 'Reset all',
-            footNote: 'Changes apply instantly and survive script updates', btnCancel: 'Cancel', btnSave: 'Save', close: 'Close',
+            btnCancel: 'Cancel', btnSave: 'Save', close: 'Close',
             toastSaved: 'Saved', toastReset: 'Defaults restored', toastImported: 'Settings imported', importError: 'Import failed: invalid file'
         },
         'zh-TW': {
@@ -1019,7 +1019,7 @@
             secMisc: '其他', debug: '偵錯記錄', debugDesc: '在 Console 輸出事件細節，回報問題時開啟。',
             secData: '設定資料', exportImport: '匯出 / 匯入', exportImportDesc: '以 JSON 備份或搬移全部設定。', btnExport: '匯出', btnImport: '匯入',
             reset: '回復預設值', resetDesc: '清除所有自訂設定。', btnReset: '全部重置',
-            footNote: '設定即時生效，腳本更新不會遺失', btnCancel: '取消', btnSave: '儲存', close: '關閉',
+            btnCancel: '取消', btnSave: '儲存', close: '關閉',
             toastSaved: '已儲存', toastReset: '已回復預設值', toastImported: '已匯入設定', importError: '匯入失敗：檔案格式錯誤'
         },
         'zh-CN': {
@@ -1039,7 +1039,7 @@
             secMisc: '其他', debug: '调试日志', debugDesc: '在 Console 输出事件细节，反馈问题时开启。',
             secData: '设置数据', exportImport: '导出 / 导入', exportImportDesc: '以 JSON 备份或迁移全部设置。', btnExport: '导出', btnImport: '导入',
             reset: '恢复默认值', resetDesc: '清除所有自定义设置。', btnReset: '全部重置',
-            footNote: '设置即时生效，脚本更新不会丢失', btnCancel: '取消', btnSave: '保存', close: '关闭',
+            btnCancel: '取消', btnSave: '保存', close: '关闭',
             toastSaved: '已保存', toastReset: '已恢复默认值', toastImported: '已导入设置', importError: '导入失败：文件格式错误'
         },
         ja: {
@@ -1059,7 +1059,7 @@
             secMisc: 'その他', debug: 'デバッグログ', debugDesc: '不具合報告用にイベント詳細を Console に出力します。',
             secData: '設定データ', exportImport: 'エクスポート / インポート', exportImportDesc: '全設定を JSON でバックアップ・移行します。', btnExport: 'エクスポート', btnImport: 'インポート',
             reset: 'デフォルトに戻す', resetDesc: 'すべてのカスタマイズを消去します。', btnReset: 'すべてリセット',
-            footNote: '設定は即時反映され、スクリプト更新後も保持されます', btnCancel: 'キャンセル', btnSave: '保存', close: '閉じる',
+            btnCancel: 'キャンセル', btnSave: '保存', close: '閉じる',
             toastSaved: '保存しました', toastReset: 'デフォルトに戻しました', toastImported: '設定をインポートしました', importError: 'インポート失敗：ファイル形式が不正です'
         },
         ko: {
@@ -1079,7 +1079,7 @@
             secMisc: '기타', debug: '디버그 로그', debugDesc: '버그 신고용 이벤트 상세를 Console에 출력합니다.',
             secData: '설정 데이터', exportImport: '내보내기 / 가져오기', exportImportDesc: '전체 설정을 JSON으로 백업·이동합니다.', btnExport: '내보내기', btnImport: '가져오기',
             reset: '기본값 복원', resetDesc: '모든 사용자 설정을 지웁니다.', btnReset: '전체 초기화',
-            footNote: '설정은 즉시 적용되며 스크립트 업데이트 후에도 유지됩니다', btnCancel: '취소', btnSave: '저장', close: '닫기',
+            btnCancel: '취소', btnSave: '저장', close: '닫기',
             toastSaved: '저장됨', toastReset: '기본값 복원됨', toastImported: '설정 가져옴', importError: '가져오기 실패: 잘못된 파일'
         },
         pt: {
@@ -1099,7 +1099,7 @@
             secMisc: 'Diversos', debug: 'Registro de depuração', debugDesc: 'Registra detalhes de eventos no Console para relatórios de bugs.',
             secData: 'Dados de configuração', exportImport: 'Exportar / Importar', exportImportDesc: 'Faça backup ou mova todas as configurações como JSON.', btnExport: 'Exportar', btnImport: 'Importar',
             reset: 'Restaurar padrões', resetDesc: 'Limpa todas as personalizações.', btnReset: 'Redefinir tudo',
-            footNote: 'As alterações se aplicam na hora e sobrevivem a atualizações do script', btnCancel: 'Cancelar', btnSave: 'Salvar', close: 'Fechar',
+            btnCancel: 'Cancelar', btnSave: 'Salvar', close: 'Fechar',
             toastSaved: 'Salvo', toastReset: 'Padrões restaurados', toastImported: 'Configurações importadas', importError: 'Falha na importação: arquivo inválido'
         },
         es: {
@@ -1119,7 +1119,7 @@
             secMisc: 'Varios', debug: 'Registro de depuración', debugDesc: 'Registra detalles de eventos en la Console para informes de errores.',
             secData: 'Datos de configuración', exportImport: 'Exportar / Importar', exportImportDesc: 'Respalda o traslada toda la configuración como JSON.', btnExport: 'Exportar', btnImport: 'Importar',
             reset: 'Restaurar valores predeterminados', resetDesc: 'Borra todas las personalizaciones.', btnReset: 'Restablecer todo',
-            footNote: 'Los cambios se aplican al instante y sobreviven a las actualizaciones del script', btnCancel: 'Cancelar', btnSave: 'Guardar', close: 'Cerrar',
+            btnCancel: 'Cancelar', btnSave: 'Guardar', close: 'Cerrar',
             toastSaved: 'Guardado', toastReset: 'Valores predeterminados restaurados', toastImported: 'Configuración importada', importError: 'Error de importación: archivo no válido'
         }
     };
@@ -1308,8 +1308,7 @@
         .advbtn.open .car { transform: rotate(90deg); }
         .advbody { display: none; }
         .advbody.open { display: block; }
-        .foot { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--hairline); }
-        .note { font-size: 11.5px; color: var(--text-3); margin-right: auto; }
+        .foot { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--hairline); }
         .btn { font: inherit; font-size: 13px; border-radius: 8px; cursor: pointer; padding: 8px 16px; border: 1px solid var(--hairline); background: none; color: var(--text-2); }
         .btn:hover { color: var(--text); background: var(--panel-2); }
         .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
@@ -1776,7 +1775,7 @@
                     h('span', { class: 'chip', text: SITE === 'bilibili' ? 'Bilibili' : 'YouTube' }),
                     closeBtn),
                 h('div', { class: 'body' }, nav, h('main', {}, paneGeneral, paneZones, paneWheel, paneAdvanced)),
-                h('div', { class: 'foot' }, h('span', { class: 'note', text: T.footNote }), cancelBtn, saveBtn)),
+                h('div', { class: 'foot' }, cancelBtn, saveBtn)),
             refs.toast);
         refs.wrap.addEventListener('mousedown', e => e.stopPropagation());
         refs.wrap.addEventListener('click', e => e.stopPropagation());
