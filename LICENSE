@@ -19,3 +19,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Brand Assets Exception
+
+The "Slippy Mouse" name, logo, and mascot artwork, and the asset files
+under assets/brand/ (including all .svg and .png files), are NOT covered
+by the MIT License above. They are Copyright (c) 2026 navishachiku, all
+rights reserved, and are included in this repository solely for building
+and documenting official releases of this project.
+
+This exception applies to the brand artwork wherever it appears in the
+repository, including the images under docs/images/ and copies embedded
+in source files (such as inline SVG or data URIs in SlippyMouse.user.js
+and extension/content.js).
+
+The brand artwork may not be copied, modified, redistributed, or used in
+derivative works, forks, or any other project, product, or service
+without prior written permission from the copyright holder, except that
+unmodified copies may be retained as part of verbatim redistributions of
+this repository.
