@@ -40,7 +40,7 @@ No code editing required — click the mouse icon on the player control bar to o
 * **Instant apply & persistence**: Changes take effect immediately; "Save" writes them to browser storage — **script updates never wipe your settings**; "Cancel" or Esc reverts.
 * **Hotkeys**: Zone overlay defaults to `Alt+Shift+Z`; the panel hotkey is unbound by default. Both are reassignable in the panel with modifier-combo support (Esc cancels capture, Backspace clears).
 * **Export / Import / Reset**: Back up settings as a JSON file, move them to another browser, or restore factory defaults in one click.
-* **Interface language**: Follows your browser locale (English, Traditional/Simplified Chinese, Japanese, Korean, Portuguese, Spanish), falling back to English.
+* **Interface language**: Follows your browser locale, falling back to English; a manual override is available in the panel.
 * **Appearance**: Light / dark / auto (follows system preference).
 
 ## ⚙️ Customizable Parameters

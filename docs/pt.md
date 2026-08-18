@@ -36,7 +36,7 @@ Sem edição de código — clique no ícone de mouse na barra de controles do p
 * **Aplicação instantânea e persistência**: As mudanças valem na hora; "Salvar" grava no armazenamento do navegador — **atualizações do script nunca apagam suas configurações**; "Cancelar" ou Esc reverte.
 * **Atalhos**: A exibição de zonas usa `Alt+Shift+Z` por padrão; o atalho do painel vem desativado. Ambos podem ser reatribuídos no painel, com suporte a combinações de modificadores (Esc cancela a captura, Backspace limpa).
 * **Exportar / Importar / Redefinir**: Faça backup das configurações em JSON, leve-as para outro navegador ou restaure os padrões de fábrica com um clique.
-* **Idioma da interface**: Segue o idioma do navegador (inglês, chinês tradicional/simplificado, japonês, coreano, português, espanhol), com inglês como padrão.
+* **Idioma da interface**: Segue o idioma do navegador, com inglês como padrão; também é possível escolher manualmente no painel.
 * **Aparência**: Claro / escuro / automático (segue o sistema).
 
 ## ⚙️ Parâmetros Personalizáveis

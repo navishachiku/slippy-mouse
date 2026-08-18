@@ -36,7 +36,7 @@ Sin editar código — haz clic en el icono de ratón en la barra de controles d
 * **Aplicación instantánea y persistencia**: Los cambios se aplican al momento; "Guardar" los escribe en el almacenamiento del navegador — **las actualizaciones del script nunca borran tu configuración**; "Cancelar" o Esc revierte.
 * **Atajos**: La visualización de zonas usa `Alt+Shift+Z` por defecto; el atajo del panel viene sin asignar. Ambos se pueden reasignar en el panel, con soporte para combinaciones de modificadores (Esc cancela la captura, Backspace borra).
 * **Exportar / Importar / Restablecer**: Respalda la configuración como JSON, llévala a otro navegador o restaura los valores de fábrica con un clic.
-* **Idioma de la interfaz**: Sigue el idioma del navegador (inglés, chino tradicional/simplificado, japonés, coreano, portugués, español), con inglés como respaldo.
+* **Idioma de la interfaz**: Sigue el idioma del navegador, con inglés como respaldo; también se puede elegir manualmente en el panel.
 * **Apariencia**: Claro / oscuro / automático (según el sistema).
 
 ## ⚙️ Parámetros Personalizables
