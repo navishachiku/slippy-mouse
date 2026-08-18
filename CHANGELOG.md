@@ -2,6 +2,28 @@
 
 All notable changes to the **Slippy Mouse** project (formerly YouTube Mouse Master) will be documented in this file.
 
+## [1.1.0] - 2026-08-18
+
+### Added
+- **Drag-to-resize zones**: The zonebar in the Zone Actions tab now has draggable dividers — resize the three zones with 1% snapping and a 5% minimum width. Widths apply to hit-testing and the zone overlay live and persist with your settings.
+- **Custom zone names**: Each zone can be renamed in the Zone Actions tab; names sync to the zonebar, pane title, and player overlay. Leave the field empty to fall back to the locale default (now position-based: "Left zone / Middle zone / Right zone").
+- **Manual language selection**: A Language dropdown in the General tab overrides the browser locale, with instant switching. "Auto" keeps following the browser.
+- **Six new languages**: French, German, Italian, Russian, Thai, and Vietnamese — the panel, zone overlay, and OSD are now available in 13 languages, with full docs translations for each.
+- **Animated demo**: The README demo is now a 13-second animated walkthrough of the three-zone controls, plus an annotated screenshot marking the settings panel entry point.
+
+### Fixed
+- Localized the zone overlay (zone titles and action labels) and the remaining OSD strings (zone toggle, mute), which were previously hardcoded English.
+- Settings import no longer drops zone widths and zone names from the imported file.
+- Reset now restores live zone widths immediately instead of only clearing storage.
+- The zonebar selection outline follows the container's rounded corners instead of poking past them.
+- Settings sections are visually separated: item dividers no longer run under a section's last row, and section headers get more breathing room.
+
+### Changed
+- The settings panel logo is now the Slippy Mouse brand icon (inline SVG) instead of the placeholder gradient square.
+- Languages in the README bar and the panel dropdown are ordered by audience size (English, then Simplified/Traditional Chinese, then by estimated YouTube user population).
+- The redundant settings footer note was removed.
+- LICENSE now carves the Slippy Mouse name, logo, and brand assets out of the MIT grant (all rights reserved), including copies embedded in source files; brand vector sources were added under `assets/brand/`.
+
 ## [1.0.1] - 2026-08-17
 
 ### Changed
