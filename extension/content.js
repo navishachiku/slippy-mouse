@@ -788,7 +788,7 @@
             if (!api || typeof api.setVolume !== 'function') return;
             api.setVolume(val);
             if (api.isMuted && api.isMuted() && val > 0) api.unMute();
-            showOSD(val === 0 ? `🔊 Mute` : `🔊 ${val}%`);
+            showOSD(val === 0 ? `🔇 ${T.ovl.mute}` : `🔊 ${val}%`);
         },
         seek: (delta) => {
             if (!api || typeof api.getCurrentTime !== 'function' || typeof api.getDuration !== 'function') return;
@@ -992,7 +992,7 @@
             theme: 'Appearance', language: 'Language', themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark',
             secOsd: 'OSD', osdSize: 'Text size', osdDuration: 'Display time', osdFade: 'Fade-out time',
             secPickZone: 'Zones', zoneNames: ['Left zone', 'Middle zone', 'Right zone'], zoneNameLabel: 'Name',
-            geomNote: 'Drag the dividers between zones to resize them.',
+            geomNote: 'Drag the dividers between zones to resize them.', osdZonesOn: 'Zones visible', osdZonesOff: 'Zones hidden',
             ovl: { mute: 'Mute', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Forward {v}s', back: 'Back {v}s', pp: 'Play/Pause', spdSet: 'Speed {v}x', spdUp: 'Speed +{v}x', spdDown: 'Speed -{v}x' },
             triggers: { left_click: 'Left click', right_click: 'Right click', middle_click: 'Middle click', wheel_up: 'Wheel ↑', wheel_down: 'Wheel ↓' },
             actions: { none: 'Do nothing (native)', volume_set: 'Set volume', volume_up: 'Volume up', volume_down: 'Volume down', seek: 'Seek', toggle_play_pause: 'Play / Pause', speed_set: 'Set speed', speed_up: 'Speed up', speed_down: 'Speed down' },
@@ -1012,7 +1012,7 @@
             theme: '外觀', language: '介面語言', themeAuto: '自動', themeLight: '淺色', themeDark: '深色',
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留時間', osdFade: '淡出時長',
             secPickZone: '選擇區域', zoneNames: ['左側區', '中間區', '右側區'], zoneNameLabel: '名稱',
-            geomNote: '拖曳區塊間的分隔線即可調整區域寬度。',
+            geomNote: '拖曳區塊間的分隔線即可調整區域寬度。', osdZonesOn: '顯示分區', osdZonesOff: '隱藏分區',
             ovl: { mute: '靜音', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '快進 {v} 秒', back: '快退 {v} 秒', pp: '播放/暫停', spdSet: '倍速 {v}x', spdUp: '倍速 +{v}x', spdDown: '倍速 -{v}x' },
             triggers: { left_click: '左鍵', right_click: '右鍵', middle_click: '中鍵', wheel_up: '滾輪 ↑', wheel_down: '滾輪 ↓' },
             actions: { none: '無（放行原生行為）', volume_set: '設定音量', volume_up: '音量增加', volume_down: '音量減少', seek: '快進 / 快退', toggle_play_pause: '播放 / 暫停', speed_set: '設定倍速', speed_up: '倍速增加', speed_down: '倍速減少' },
@@ -1032,7 +1032,7 @@
             theme: '外观', language: '界面语言', themeAuto: '自动', themeLight: '浅色', themeDark: '深色',
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留时间', osdFade: '淡出时长',
             secPickZone: '选择区域', zoneNames: ['左侧区', '中间区', '右侧区'], zoneNameLabel: '名称',
-            geomNote: '拖拽区块间的分隔线即可调整区域宽度。',
+            geomNote: '拖拽区块间的分隔线即可调整区域宽度。', osdZonesOn: '显示分区', osdZonesOff: '隐藏分区',
             ovl: { mute: '静音', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '快进 {v} 秒', back: '快退 {v} 秒', pp: '播放/暂停', spdSet: '倍速 {v}x', spdUp: '倍速 +{v}x', spdDown: '倍速 -{v}x' },
             triggers: { left_click: '左键', right_click: '右键', middle_click: '中键', wheel_up: '滚轮 ↑', wheel_down: '滚轮 ↓' },
             actions: { none: '无（放行原生行为）', volume_set: '设置音量', volume_up: '音量增加', volume_down: '音量减少', seek: '快进 / 快退', toggle_play_pause: '播放 / 暂停', speed_set: '设置倍速', speed_up: '倍速增加', speed_down: '倍速减少' },
@@ -1052,7 +1052,7 @@
             theme: '外観', language: '表示言語', themeAuto: '自動', themeLight: 'ライト', themeDark: 'ダーク',
             secOsd: 'OSD 表示', osdSize: '文字サイズ', osdDuration: '表示時間', osdFade: 'フェードアウト時間',
             secPickZone: 'ゾーン選択', zoneNames: ['左ゾーン', '中央ゾーン', '右ゾーン'], zoneNameLabel: '名前',
-            geomNote: 'ゾーン間の仕切りをドラッグして幅を調整できます。',
+            geomNote: 'ゾーン間の仕切りをドラッグして幅を調整できます。', osdZonesOn: 'ゾーン表示', osdZonesOff: 'ゾーン非表示',
             ovl: { mute: 'ミュート', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '{v}秒送り', back: '{v}秒戻し', pp: '再生/一時停止', spdSet: '速度 {v}x', spdUp: '速度 +{v}x', spdDown: '速度 -{v}x' },
             triggers: { left_click: '左クリック', right_click: '右クリック', middle_click: '中クリック', wheel_up: 'ホイール ↑', wheel_down: 'ホイール ↓' },
             actions: { none: '何もしない（ネイティブ）', volume_set: '音量を設定', volume_up: '音量を上げる', volume_down: '音量を下げる', seek: 'シーク', toggle_play_pause: '再生 / 一時停止', speed_set: '速度を設定', speed_up: '速度を上げる', speed_down: '速度を下げる' },
@@ -1072,7 +1072,7 @@
             theme: '모양', language: '표시 언어', themeAuto: '자동', themeLight: '라이트', themeDark: '다크',
             secOsd: 'OSD 표시', osdSize: '글자 크기', osdDuration: '표시 시간', osdFade: '페이드아웃 시간',
             secPickZone: '존 선택', zoneNames: ['왼쪽 존', '가운데 존', '오른쪽 존'], zoneNameLabel: '이름',
-            geomNote: '존 사이의 구분선을 드래그해 너비를 조정할 수 있습니다.',
+            geomNote: '존 사이의 구분선을 드래그해 너비를 조정할 수 있습니다.', osdZonesOn: '존 표시', osdZonesOff: '존 숨김',
             ovl: { mute: '음소거', volSet: '볼륨 {v}%', volUp: '볼륨 +{v}%', volDown: '볼륨 -{v}%', fwd: '{v}초 앞으로', back: '{v}초 뒤로', pp: '재생/일시정지', spdSet: '배속 {v}x', spdUp: '배속 +{v}x', spdDown: '배속 -{v}x' },
             triggers: { left_click: '좌클릭', right_click: '우클릭', middle_click: '휠클릭', wheel_up: '휠 ↑', wheel_down: '휠 ↓' },
             actions: { none: '없음（네이티브）', volume_set: '볼륨 설정', volume_up: '볼륨 올리기', volume_down: '볼륨 내리기', seek: '탐색', toggle_play_pause: '재생 / 일시정지', speed_set: '속도 설정', speed_up: '속도 올리기', speed_down: '속도 내리기' },
@@ -1092,7 +1092,7 @@
             theme: 'Aparência', language: 'Idioma', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Escuro',
             secOsd: 'OSD', osdSize: 'Tamanho do texto', osdDuration: 'Tempo de exibição', osdFade: 'Tempo de esmaecimento',
             secPickZone: 'Zonas', zoneNames: ['Zona esquerda', 'Zona central', 'Zona direita'], zoneNameLabel: 'Nome',
-            geomNote: 'Arraste os divisores entre as zonas para redimensioná-las.',
+            geomNote: 'Arraste os divisores entre as zonas para redimensioná-las.', osdZonesOn: 'Zonas visíveis', osdZonesOff: 'Zonas ocultas',
             ovl: { mute: 'Mudo', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avançar {v}s', back: 'Voltar {v}s', pp: 'Tocar/Pausar', spdSet: 'Vel {v}x', spdUp: 'Vel +{v}x', spdDown: 'Vel -{v}x' },
             triggers: { left_click: 'Clique esquerdo', right_click: 'Clique direito', middle_click: 'Clique do meio', wheel_up: 'Roda ↑', wheel_down: 'Roda ↓' },
             actions: { none: 'Nada (nativo)', volume_set: 'Definir volume', volume_up: 'Aumentar volume', volume_down: 'Diminuir volume', seek: 'Avançar / Voltar', toggle_play_pause: 'Reproduzir / Pausar', speed_set: 'Definir velocidade', speed_up: 'Aumentar velocidade', speed_down: 'Diminuir velocidade' },
@@ -1112,7 +1112,7 @@
             theme: 'Apariencia', language: 'Idioma', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Oscuro',
             secOsd: 'OSD', osdSize: 'Tamaño del texto', osdDuration: 'Tiempo en pantalla', osdFade: 'Tiempo de desvanecimiento',
             secPickZone: 'Zonas', zoneNames: ['Zona izquierda', 'Zona central', 'Zona derecha'], zoneNameLabel: 'Nombre',
-            geomNote: 'Arrastra los divisores entre las zonas para cambiar su tamaño.',
+            geomNote: 'Arrastra los divisores entre las zonas para cambiar su tamaño.', osdZonesOn: 'Zonas visibles', osdZonesOff: 'Zonas ocultas',
             ovl: { mute: 'Silencio', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avanzar {v}s', back: 'Retroceder {v}s', pp: 'Reproducir/Pausa', spdSet: 'Vel {v}x', spdUp: 'Vel +{v}x', spdDown: 'Vel -{v}x' },
             triggers: { left_click: 'Clic izquierdo', right_click: 'Clic derecho', middle_click: 'Clic central', wheel_up: 'Rueda ↑', wheel_down: 'Rueda ↓' },
             actions: { none: 'Nada (nativo)', volume_set: 'Fijar volumen', volume_up: 'Subir volumen', volume_down: 'Bajar volumen', seek: 'Avanzar / Retroceder', toggle_play_pause: 'Reproducir / Pausar', speed_set: 'Fijar velocidad', speed_up: 'Subir velocidad', speed_down: 'Bajar velocidad' },
@@ -1132,7 +1132,7 @@
             theme: 'Apparence', language: 'Langue', themeAuto: 'Auto', themeLight: 'Clair', themeDark: 'Sombre',
             secOsd: 'OSD', osdSize: 'Taille du texte', osdDuration: 'Durée d’affichage', osdFade: 'Durée du fondu',
             secPickZone: 'Zones', zoneNames: ['Zone gauche', 'Zone centrale', 'Zone droite'], zoneNameLabel: 'Nom',
-            geomNote: 'Faites glisser les séparateurs entre les zones pour les redimensionner.',
+            geomNote: 'Faites glisser les séparateurs entre les zones pour les redimensionner.', osdZonesOn: 'Zones affichées', osdZonesOff: 'Zones masquées',
             ovl: { mute: 'Muet', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avancer {v}s', back: 'Reculer {v}s', pp: 'Lecture/Pause', spdSet: 'Vitesse {v}x', spdUp: 'Vitesse +{v}x', spdDown: 'Vitesse -{v}x' },
             triggers: { left_click: 'Clic gauche', right_click: 'Clic droit', middle_click: 'Clic molette', wheel_up: 'Molette ↑', wheel_down: 'Molette ↓' },
             actions: { none: 'Ne rien faire (natif)', volume_set: 'Définir le volume', volume_up: 'Augmenter le volume', volume_down: 'Baisser le volume', seek: 'Avancer / Reculer', toggle_play_pause: 'Lecture / Pause', speed_set: 'Définir la vitesse', speed_up: 'Accélérer', speed_down: 'Ralentir' },
@@ -1152,7 +1152,7 @@
             theme: 'Erscheinungsbild', language: 'Sprache', themeAuto: 'Auto', themeLight: 'Hell', themeDark: 'Dunkel',
             secOsd: 'OSD', osdSize: 'Textgröße', osdDuration: 'Anzeigedauer', osdFade: 'Ausblenddauer',
             secPickZone: 'Zonen', zoneNames: ['Linke Zone', 'Mittlere Zone', 'Rechte Zone'], zoneNameLabel: 'Name',
-            geomNote: 'Ziehen Sie die Trennlinien zwischen den Zonen, um ihre Breite anzupassen.',
+            geomNote: 'Ziehen Sie die Trennlinien zwischen den Zonen, um ihre Breite anzupassen.', osdZonesOn: 'Zonen sichtbar', osdZonesOff: 'Zonen ausgeblendet',
             ovl: { mute: 'Stumm', volSet: 'Lautst. {v}%', volUp: 'Lautst. +{v}%', volDown: 'Lautst. -{v}%', fwd: '{v}s vor', back: '{v}s zurück', pp: 'Wiedergabe/Pause', spdSet: 'Tempo {v}x', spdUp: 'Tempo +{v}x', spdDown: 'Tempo -{v}x' },
             triggers: { left_click: 'Linksklick', right_click: 'Rechtsklick', middle_click: 'Mittelklick', wheel_up: 'Rad ↑', wheel_down: 'Rad ↓' },
             actions: { none: 'Nichts tun (nativ)', volume_set: 'Lautstärke setzen', volume_up: 'Lauter', volume_down: 'Leiser', seek: 'Spulen', toggle_play_pause: 'Wiedergabe / Pause', speed_set: 'Tempo setzen', speed_up: 'Schneller', speed_down: 'Langsamer' },
@@ -1172,7 +1172,7 @@
             theme: 'Aspetto', language: 'Lingua', themeAuto: 'Auto', themeLight: 'Chiaro', themeDark: 'Scuro',
             secOsd: 'OSD', osdSize: 'Dimensione testo', osdDuration: 'Durata visualizzazione', osdFade: 'Durata dissolvenza',
             secPickZone: 'Zone', zoneNames: ['Zona sinistra', 'Zona centrale', 'Zona destra'], zoneNameLabel: 'Nome',
-            geomNote: 'Trascina i divisori tra le zone per ridimensionarle.',
+            geomNote: 'Trascina i divisori tra le zone per ridimensionarle.', osdZonesOn: 'Zone visibili', osdZonesOff: 'Zone nascoste',
             ovl: { mute: 'Muto', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avanti {v}s', back: 'Indietro {v}s', pp: 'Riproduci/Pausa', spdSet: 'Velocità {v}x', spdUp: 'Velocità +{v}x', spdDown: 'Velocità -{v}x' },
             triggers: { left_click: 'Clic sinistro', right_click: 'Clic destro', middle_click: 'Clic centrale', wheel_up: 'Rotella ↑', wheel_down: 'Rotella ↓' },
             actions: { none: 'Nessuna azione (nativa)', volume_set: 'Imposta volume', volume_up: 'Alza volume', volume_down: 'Abbassa volume', seek: 'Avanti / Indietro', toggle_play_pause: 'Riproduci / Pausa', speed_set: 'Imposta velocità', speed_up: 'Aumenta velocità', speed_down: 'Riduci velocità' },
@@ -1192,7 +1192,7 @@
             theme: 'Оформление', language: 'Язык', themeAuto: 'Авто', themeLight: 'Светлая', themeDark: 'Тёмная',
             secOsd: 'OSD', osdSize: 'Размер текста', osdDuration: 'Время показа', osdFade: 'Время затухания',
             secPickZone: 'Зоны', zoneNames: ['Левая зона', 'Средняя зона', 'Правая зона'], zoneNameLabel: 'Имя',
-            geomNote: 'Перетаскивайте разделители между зонами, чтобы изменить их ширину.',
+            geomNote: 'Перетаскивайте разделители между зонами, чтобы изменить их ширину.', osdZonesOn: 'Зоны показаны', osdZonesOff: 'Зоны скрыты',
             ovl: { mute: 'Без звука', volSet: 'Громк. {v}%', volUp: 'Громк. +{v}%', volDown: 'Громк. -{v}%', fwd: 'Вперёд {v}с', back: 'Назад {v}с', pp: 'Пуск/Пауза', spdSet: 'Скорость {v}x', spdUp: 'Скорость +{v}x', spdDown: 'Скорость -{v}x' },
             triggers: { left_click: 'ЛКМ', right_click: 'ПКМ', middle_click: 'СКМ', wheel_up: 'Колесо ↑', wheel_down: 'Колесо ↓' },
             actions: { none: 'Ничего (нативно)', volume_set: 'Задать громкость', volume_up: 'Громче', volume_down: 'Тише', seek: 'Перемотка', toggle_play_pause: 'Пуск / Пауза', speed_set: 'Задать скорость', speed_up: 'Быстрее', speed_down: 'Медленнее' },
@@ -1212,7 +1212,7 @@
             theme: 'ธีม', language: 'ภาษา', themeAuto: 'อัตโนมัติ', themeLight: 'สว่าง', themeDark: 'มืด',
             secOsd: 'OSD', osdSize: 'ขนาดตัวอักษร', osdDuration: 'ระยะเวลาแสดง', osdFade: 'ระยะเวลาจาง',
             secPickZone: 'โซน', zoneNames: ['โซนซ้าย', 'โซนกลาง', 'โซนขวา'], zoneNameLabel: 'ชื่อ',
-            geomNote: 'ลากเส้นแบ่งระหว่างโซนเพื่อปรับความกว้าง',
+            geomNote: 'ลากเส้นแบ่งระหว่างโซนเพื่อปรับความกว้าง', osdZonesOn: 'แสดงโซน', osdZonesOff: 'ซ่อนโซน',
             ovl: { mute: 'ปิดเสียง', volSet: 'เสียง {v}%', volUp: 'เสียง +{v}%', volDown: 'เสียง -{v}%', fwd: 'ไปหน้า {v} วิ', back: 'ถอยหลัง {v} วิ', pp: 'เล่น/หยุด', spdSet: 'ความเร็ว {v}x', spdUp: 'ความเร็ว +{v}x', spdDown: 'ความเร็ว -{v}x' },
             triggers: { left_click: 'คลิกซ้าย', right_click: 'คลิกขวา', middle_click: 'คลิกกลาง', wheel_up: 'ล้อ ↑', wheel_down: 'ล้อ ↓' },
             actions: { none: 'ไม่ทำอะไร (ดั้งเดิม)', volume_set: 'ตั้งระดับเสียง', volume_up: 'เพิ่มเสียง', volume_down: 'ลดเสียง', seek: 'เลื่อนตำแหน่ง', toggle_play_pause: 'เล่น / หยุดชั่วคราว', speed_set: 'ตั้งความเร็ว', speed_up: 'เร่งความเร็ว', speed_down: 'ลดความเร็ว' },
@@ -1232,7 +1232,7 @@
             theme: 'Giao diện', language: 'Ngôn ngữ', themeAuto: 'Tự động', themeLight: 'Sáng', themeDark: 'Tối',
             secOsd: 'OSD', osdSize: 'Cỡ chữ', osdDuration: 'Thời gian hiển thị', osdFade: 'Thời gian mờ dần',
             secPickZone: 'Vùng', zoneNames: ['Vùng trái', 'Vùng giữa', 'Vùng phải'], zoneNameLabel: 'Tên',
-            geomNote: 'Kéo vạch phân cách giữa các vùng để chỉnh độ rộng.',
+            geomNote: 'Kéo vạch phân cách giữa các vùng để chỉnh độ rộng.', osdZonesOn: 'Hiện vùng', osdZonesOff: 'Ẩn vùng',
             ovl: { mute: 'Tắt tiếng', volSet: 'Âm lượng {v}%', volUp: 'Âm lượng +{v}%', volDown: 'Âm lượng -{v}%', fwd: 'Tua tới {v}s', back: 'Tua lùi {v}s', pp: 'Phát/Dừng', spdSet: 'Tốc độ {v}x', spdUp: 'Tốc độ +{v}x', spdDown: 'Tốc độ -{v}x' },
             triggers: { left_click: 'Chuột trái', right_click: 'Chuột phải', middle_click: 'Chuột giữa', wheel_up: 'Lăn ↑', wheel_down: 'Lăn ↓' },
             actions: { none: 'Không làm gì (gốc)', volume_set: 'Đặt âm lượng', volume_up: 'Tăng âm lượng', volume_down: 'Giảm âm lượng', seek: 'Tua', toggle_play_pause: 'Phát / Tạm dừng', speed_set: 'Đặt tốc độ', speed_up: 'Tăng tốc độ', speed_down: 'Giảm tốc độ' },
@@ -2299,7 +2299,7 @@
             e.preventDefault();
             isZonesVisible = !isZonesVisible;
             updateZoneVisuals();
-            showOSD(isZonesVisible ? "👀 Zones Visible" : "🙈 Zones Hidden");
+            showOSD(isZonesVisible ? `👀 ${T.osdZonesOn}` : `🙈 ${T.osdZonesOff}`);
         } else if (matchHotkey(e, SETTINGS.SETTINGS_TOGGLE_KEY)) {
             e.preventDefault();
             togglePanel();
