@@ -1269,6 +1269,8 @@
         .zonebar button .zw { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; opacity: 0.75; }
         .zonebar button:hover { filter: brightness(1.15); }
         .zonebar button.sel { box-shadow: inset 0 0 0 2px var(--accent); filter: brightness(1.1); }
+        .zonebar button:first-of-type { border-radius: 9px 0 0 9px; }
+        .zonebar button:last-of-type { border-radius: 0 9px 9px 0; }
         .zonebar .zhandle { position: absolute; top: 0; height: 100%; width: 14px; transform: translateX(-50%);
             display: flex; align-items: center; justify-content: center; cursor: col-resize; touch-action: none; z-index: 2; }
         .zonebar .zhandle .grip { width: 4px; height: 26px; border-radius: 2px; background: var(--zone-label); opacity: 0.45; transition: opacity 0.12s, background 0.12s; }
