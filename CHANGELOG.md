@@ -2,6 +2,11 @@
 
 All notable changes to the **Slippy Mouse** project (formerly YouTube Mouse Master) will be documented in this file.
 
+## [1.1.2] - 2026-08-18
+
+### Fixed
+- Speed-up, slow-down, and set-speed OSD prompts now show distinct gauge needles (right-high, left-low, and centered) instead of sharing one glyph that always read as "faster".
+
 ## [1.1.1] - 2026-08-18
 
 ### Changed
