@@ -411,6 +411,78 @@
      * 
      * @returns {HTMLElement} The OSD DOM element.
      */
+    // Monochrome OSD/overlay glyphs on a 24×24 viewBox, drawn via DOM APIs:
+    // YouTube's Trusted Types CSP forbids innerHTML string assignment in the
+    // page context. Colors use currentColor so glyphs inherit the text color.
+    const GLYPHS = (() => {
+        const SPEAKER = ['path', { d: 'M4 9v6h4l5 4.5v-15L8 9H4z', fill: 'currentColor' }];
+        const MOUSE_BODY = ['rect', { x: '7.5', y: '2.5', width: '9', height: '19', rx: '4.5', fill: 'none', stroke: 'currentColor', 'stroke-width': '2' }];
+        const MOUSE_SPLIT = ['path', { d: 'M12 3v6.5M7.5 9.5h9', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.5' }];
+        return {
+            vol: [
+                SPEAKER,
+                ['path', { d: 'M15.5 9.2a4.2 4.2 0 0 1 0 5.6', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['path', { d: 'M18.2 6.6a8 8 0 0 1 0 10.8', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }]
+            ],
+            mute: [
+                SPEAKER,
+                ['path', { d: 'M16 9.5l5 5M21 9.5l-5 5', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }]
+            ],
+            fwd: [
+                ['path', { d: 'M4 6v12l8-6z', fill: 'currentColor' }],
+                ['path', { d: 'M12 6v12l8-6z', fill: 'currentColor' }]
+            ],
+            back: [
+                ['path', { d: 'M20 6v12l-8-6z', fill: 'currentColor' }],
+                ['path', { d: 'M12 6v12l-8-6z', fill: 'currentColor' }]
+            ],
+            play: [['path', { d: 'M7 5v14l12-7z', fill: 'currentColor' }]],
+            pause: [
+                ['rect', { x: '6.5', y: '5', width: '4', height: '14', rx: '1.5', fill: 'currentColor' }],
+                ['rect', { x: '13.5', y: '5', width: '4', height: '14', rx: '1.5', fill: 'currentColor' }]
+            ],
+            speed: [
+                ['path', { d: 'M4.5 16.5a8.5 8.5 0 1 1 15 0', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['path', { d: 'M12 15.5l4.5-6', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['circle', { cx: '12', cy: '15.5', r: '1.7', fill: 'currentColor' }]
+            ],
+            eye: [
+                ['path', { d: 'M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linejoin': 'round' }],
+                ['circle', { cx: '12', cy: '12', r: '3', fill: 'currentColor' }]
+            ],
+            eyeOff: [
+                ['path', { d: 'M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linejoin': 'round' }],
+                ['path', { d: 'M4.5 19.5l15-15', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }]
+            ],
+            mouseL: [MOUSE_BODY, MOUSE_SPLIT, ['path', { d: 'M11 3.6V8.5H8.5V7A4 4 0 0 1 11 3.6z', fill: 'currentColor' }]],
+            mouseR: [MOUSE_BODY, MOUSE_SPLIT, ['path', { d: 'M13 3.6V8.5h2.5V7A4 4 0 0 0 13 3.6z', fill: 'currentColor' }]],
+            mouseM: [MOUSE_BODY, ['rect', { x: '10.8', y: '5', width: '2.4', height: '5.5', rx: '1.2', fill: 'currentColor' }]],
+            wheelUp: [['path', { d: 'M6 14.5l6-6 6 6', fill: 'none', stroke: 'currentColor', 'stroke-width': '2.5', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }]],
+            wheelDown: [['path', { d: 'M6 9.5l6 6 6-6', fill: 'none', stroke: 'currentColor', 'stroke-width': '2.5', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }]]
+        };
+    })();
+
+    /**
+     * Build a glyph SVG element.
+     *
+     * @param {string} name A key of GLYPHS.
+     * @param {string} size CSS size applied to both dimensions.
+     *
+     * @returns {SVGSVGElement} The icon element.
+     */
+    function buildGlyph(name, size) {
+        const NS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(NS, 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        Object.assign(svg.style, { width: size, height: size, flexShrink: '0', display: 'block' });
+        (GLYPHS[name] || []).forEach(([tag, attrs]) => {
+            const el = document.createElementNS(NS, tag);
+            for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+            svg.appendChild(el);
+        });
+        return svg;
+    }
+
     const createOSD = () => {
         let el = document.getElementById('yt-mouse-master-osd');
         if (!el) {
@@ -430,6 +502,8 @@
                 zIndex: '2147483647',
                 pointerEvents: 'none',
                 display: 'none',
+                alignItems: 'center',
+                gap: '0.4em',
                 fontFamily: 'Roboto, Arial, sans-serif',
                 transition: `opacity ${SETTINGS.OSD_FADE_OUT / 1000}s ease`,
                 whiteSpace: 'nowrap',
@@ -477,7 +551,7 @@
      * 
      * @param {string} text The message to display on the OSD.
      */
-    const showOSD = (text) => {
+    const showOSD = (text, icon) => {
         const el = createOSD();
         const isShorts = window.location.pathname.startsWith('/shorts/');
 
@@ -535,12 +609,14 @@
             });
         }
 
-        el.textContent = text;
+        el.textContent = '';
+        if (icon) el.appendChild(buildGlyph(icon, '1.1em'));
+        if (text) el.appendChild(document.createTextNode(text));
 
         clearTimeout(osdTimer);
         clearTimeout(osdHideTimer);
 
-        el.style.display = 'block';
+        el.style.display = 'flex';
         el.style.opacity = '1';
 
         // Start fade-out sequence
@@ -656,11 +732,11 @@
             let label = '';
 
             // Icon Mapping
-            if (type === 'left_click') icon = '🖱️L';
-            else if (type === 'right_click') icon = '🖱️R';
-            else if (type === 'middle_click') icon = '🖱️M';
-            else if (type === 'wheel_up') icon = '🔼';
-            else if (type === 'wheel_down') icon = '🔽';
+            if (type === 'left_click') icon = 'mouseL';
+            else if (type === 'right_click') icon = 'mouseR';
+            else if (type === 'middle_click') icon = 'mouseM';
+            else if (type === 'wheel_up') icon = 'wheelUp';
+            else if (type === 'wheel_down') icon = 'wheelDown';
 
             // Action Mapping
             const fmt = (tpl, v) => tpl.replace('{v}', v);
@@ -747,9 +823,10 @@
                     });
                     
                     const iconSpan = document.createElement('span');
-                    iconSpan.textContent = info.icon;
-                    iconSpan.style.opacity = '0.8';
+                    iconSpan.appendChild(buildGlyph(info.icon, '15px'));
+                    iconSpan.style.opacity = '0.85';
                     iconSpan.style.marginRight = '10px';
+                    iconSpan.style.display = 'flex';
 
                     const labelSpan = document.createElement('span');
                     labelSpan.textContent = info.label;
@@ -776,19 +853,20 @@
             const next = Math.min(100, api.getVolume() + val);
             api.setVolume(next);
             if (api.isMuted && api.isMuted()) api.unMute();
-            showOSD(`🔊 ${next}%`);
+            showOSD(`${next}%`, 'vol');
         },
         volume_down: (val) => {
             if (!api || typeof api.getVolume !== 'function') return;
             const next = Math.max(0, api.getVolume() - val);
             api.setVolume(next);
-            showOSD(`🔊 ${next}%`);
+            showOSD(`${next}%`, 'vol');
         },
         volume_set: (val) => {
             if (!api || typeof api.setVolume !== 'function') return;
             api.setVolume(val);
             if (api.isMuted && api.isMuted() && val > 0) api.unMute();
-            showOSD(val === 0 ? `🔇 ${T.ovl.mute}` : `🔊 ${val}%`);
+            if (val === 0) showOSD(T.ovl.mute, 'mute');
+            else showOSD(`${val}%`, 'vol');
         },
         seek: (delta) => {
             if (!api || typeof api.getCurrentTime !== 'function' || typeof api.getDuration !== 'function') return;
@@ -796,35 +874,35 @@
             const duration = api.getDuration();
             const next = Math.max(0, Math.min(duration, current + delta));
             api.seekTo(next, true);
-            showOSD(`${delta > 0 ? '⏩' : '⏪'} ${formatTime(next)} / ${formatTime(duration)}`);
+            showOSD(`${formatTime(next)} / ${formatTime(duration)}`, delta > 0 ? 'fwd' : 'back');
         },
         toggle_play_pause: () => {
             if (!api || typeof api.getPlayerState !== 'function') return;
             const state = api.getPlayerState();
             if (state === 1) {
                 api.pauseVideo();
-                showOSD('⏸️');
+                showOSD('', 'pause');
             } else {
                 api.playVideo();
-                showOSD('▶️');
+                showOSD('', 'play');
             }
         },
         speed_up: (val) => {
             if (!api || typeof api.getPlaybackRate !== 'function') return;
             const next = api.getPlaybackRate() + val;
             api.setPlaybackRate(next);
-            showOSD(`🚀 ${next.toFixed(2)}x`);
+            showOSD(`${next.toFixed(2)}x`, 'speed');
         },
         speed_down: (val) => {
             if (!api || typeof api.getPlaybackRate !== 'function') return;
             const next = Math.max(0.25, api.getPlaybackRate() - val);
             api.setPlaybackRate(next);
-            showOSD(`🐢 ${next.toFixed(2)}x`);
+            showOSD(`${next.toFixed(2)}x`, 'speed');
         },
         speed_set: (val) => {
             if (!api || typeof api.setPlaybackRate !== 'function') return;
             api.setPlaybackRate(val);
-            showOSD(`🐾 ${val.toFixed(2)}x`);
+            showOSD(`${val.toFixed(2)}x`, 'speed');
         },
         none: () => {}
     };
@@ -2299,7 +2377,7 @@
             e.preventDefault();
             isZonesVisible = !isZonesVisible;
             updateZoneVisuals();
-            showOSD(isZonesVisible ? `👀 ${T.osdZonesOn}` : `🙈 ${T.osdZonesOff}`);
+            showOSD(isZonesVisible ? T.osdZonesOn : T.osdZonesOff, isZonesVisible ? 'eye' : 'eyeOff');
         } else if (matchHotkey(e, SETTINGS.SETTINGS_TOGGLE_KEY)) {
             e.preventDefault();
             togglePanel();
