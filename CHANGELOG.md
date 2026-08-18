@@ -2,6 +2,13 @@
 
 All notable changes to the **Slippy Mouse** project (formerly YouTube Mouse Master) will be documented in this file.
 
+## [1.1.1] - 2026-08-18
+
+### Changed
+- **SVG icons**: All emoji in the OSD and zone overlay (volume, mute, seek, play/pause, speed, zone toggle, mouse buttons, wheel arrows) are replaced with monochrome vector glyphs for a consistent, professional look across platforms. Speed prompts now use a single gauge icon; the rate value conveys direction.
+- The README demo is re-encoded with periodic keyframes so long animations no longer degrade to a slideshow mid-playback in browsers, and re-recorded to show the new icons.
+- Refreshed the settings panel screenshots (language selector, zone dividers, rename field, brand logo).
+
 ## [1.1.0] - 2026-08-18
 
 ### Added
