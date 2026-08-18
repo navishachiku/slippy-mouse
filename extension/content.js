@@ -441,9 +441,19 @@
                 ['rect', { x: '6.5', y: '5', width: '4', height: '14', rx: '1.5', fill: 'currentColor' }],
                 ['rect', { x: '13.5', y: '5', width: '4', height: '14', rx: '1.5', fill: 'currentColor' }]
             ],
-            speed: [
+            speedUp: [
                 ['path', { d: 'M4.5 16.5a8.5 8.5 0 1 1 15 0', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
-                ['path', { d: 'M12 15.5l4.5-6', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['path', { d: 'M12 15.5l5.5-3.2', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['circle', { cx: '12', cy: '15.5', r: '1.7', fill: 'currentColor' }]
+            ],
+            speedDown: [
+                ['path', { d: 'M4.5 16.5a8.5 8.5 0 1 1 15 0', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['path', { d: 'M12 15.5l-5.5-3.2', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['circle', { cx: '12', cy: '15.5', r: '1.7', fill: 'currentColor' }]
+            ],
+            speedSet: [
+                ['path', { d: 'M4.5 16.5a8.5 8.5 0 1 1 15 0', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
+                ['path', { d: 'M12 15.5v-6.5', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round' }],
                 ['circle', { cx: '12', cy: '15.5', r: '1.7', fill: 'currentColor' }]
             ],
             eye: [
@@ -891,18 +901,18 @@
             if (!api || typeof api.getPlaybackRate !== 'function') return;
             const next = api.getPlaybackRate() + val;
             api.setPlaybackRate(next);
-            showOSD(`${next.toFixed(2)}x`, 'speed');
+            showOSD(`${next.toFixed(2)}x`, 'speedUp');
         },
         speed_down: (val) => {
             if (!api || typeof api.getPlaybackRate !== 'function') return;
             const next = Math.max(0.25, api.getPlaybackRate() - val);
             api.setPlaybackRate(next);
-            showOSD(`${next.toFixed(2)}x`, 'speed');
+            showOSD(`${next.toFixed(2)}x`, 'speedDown');
         },
         speed_set: (val) => {
             if (!api || typeof api.setPlaybackRate !== 'function') return;
             api.setPlaybackRate(val);
-            showOSD(`${val.toFixed(2)}x`, 'speed');
+            showOSD(`${val.toFixed(2)}x`, 'speedSet');
         },
         none: () => {}
     };
