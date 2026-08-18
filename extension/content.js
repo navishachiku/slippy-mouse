@@ -720,7 +720,7 @@
 
             // Title
             const title = document.createElement('div');
-            title.textContent = T.zoneNames[zi] || zone.name;
+            title.textContent = zoneDisplayName(zi);
             Object.assign(title.style, {
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -837,8 +837,37 @@
     const FACTORY = JSON.parse(JSON.stringify({
         settings: SETTINGS,
         zoneActions: CONFIG.map(z => z.mouse_action),
-        zoneWidths: CONFIG.map(z => parseFloat(z.size.width))
+        zoneWidths: CONFIG.map(z => parseFloat(z.size.width)),
+        zoneNames: CONFIG.map(() => '')
     }));
+
+    // Custom zone names; an empty string falls back to the locale default
+    let userZoneNames = CONFIG.map(() => '');
+
+    /**
+     * Resolve the display name of a zone: user override first, then the
+     * locale default.
+     *
+     * @param {number} i The zone index.
+     *
+     * @returns {string} The name to show in the panel and overlay.
+     */
+    function zoneDisplayName(i) {
+        return userZoneNames[i] || T.zoneNames[i] || CONFIG[i].name;
+    }
+
+    /**
+     * Normalize a stored/imported zone-name array.
+     *
+     * @param {*} names The candidate value.
+     *
+     * @returns {string[]|null} One trimmed name per zone, or null when the
+     *   value is not an array.
+     */
+    function sanitizeZoneNames(names) {
+        if (!Array.isArray(names)) return null;
+        return CONFIG.map((z, i) => typeof names[i] === 'string' ? names[i].trim().slice(0, 40) : '');
+    }
 
     // Narrower than this a zone is unusable as a wheel target
     const MIN_ZONE_WIDTH_PCT = 5;
@@ -921,6 +950,8 @@
                 });
             }
             if (isValidZoneWidths(data.zoneWidths)) setZoneWidths(data.zoneWidths);
+            const zn = sanitizeZoneNames(data.zoneNames);
+            if (zn) userZoneNames = zn;
             if (data.theme === 'light' || data.theme === 'dark') uiTheme = data.theme;
         } catch (e) {
             log('Failed to parse stored settings:', e);
@@ -938,6 +969,7 @@
                 settings,
                 zoneActions: CONFIG.map(z => z.mouse_action),
                 zoneWidths: getZoneWidths(),
+                zoneNames: userZoneNames,
                 theme: uiTheme
             }));
         } catch (e) {
@@ -956,7 +988,7 @@
             zoneKey: 'Zone overlay hotkey', zoneKeyDesc: 'Shows the three zones and their actions on the player.', panelKey: 'Settings panel hotkey', pressKey: 'Press a key…', notSet: 'Not set',
             theme: 'Appearance', themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark',
             secOsd: 'OSD', osdSize: 'Text size', osdDuration: 'Display time', osdFade: 'Fade-out time',
-            secPickZone: 'Zones', zoneNames: ['Left · Volume', 'Middle · Seek', 'Right · Speed'],
+            secPickZone: 'Zones', zoneNames: ['Left zone', 'Middle zone', 'Right zone'], zoneNameLabel: 'Name',
             geomNote: 'Drag the dividers between zones to resize them.',
             ovl: { mute: 'Mute', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Forward {v}s', back: 'Back {v}s', pp: 'Play/Pause', spdSet: 'Speed {v}x', spdUp: 'Speed +{v}x', spdDown: 'Speed -{v}x' },
             triggers: { left_click: 'Left click', right_click: 'Right click', middle_click: 'Middle click', wheel_up: 'Wheel ↑', wheel_down: 'Wheel ↓' },
@@ -976,7 +1008,7 @@
             zoneKey: '區域顯示熱鍵', zoneKeyDesc: '在播放器上顯示三區範圍與動作對照。', panelKey: '設定面板熱鍵', pressKey: '請按任意鍵…', notSet: '未設定',
             theme: '外觀', themeAuto: '自動', themeLight: '淺色', themeDark: '深色',
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留時間', osdFade: '淡出時長',
-            secPickZone: '選擇區域', zoneNames: ['左區・音量', '中區・進度', '右區・速度'],
+            secPickZone: '選擇區域', zoneNames: ['左側區', '中間區', '右側區'], zoneNameLabel: '名稱',
             geomNote: '拖曳區塊間的分隔線即可調整區域寬度。',
             ovl: { mute: '靜音', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '快進 {v} 秒', back: '快退 {v} 秒', pp: '播放/暫停', spdSet: '倍速 {v}x', spdUp: '倍速 +{v}x', spdDown: '倍速 -{v}x' },
             triggers: { left_click: '左鍵', right_click: '右鍵', middle_click: '中鍵', wheel_up: '滾輪 ↑', wheel_down: '滾輪 ↓' },
@@ -996,7 +1028,7 @@
             zoneKey: '区域显示热键', zoneKeyDesc: '在播放器上显示三区范围与动作对照。', panelKey: '设置面板热键', pressKey: '请按任意键…', notSet: '未设置',
             theme: '外观', themeAuto: '自动', themeLight: '浅色', themeDark: '深色',
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留时间', osdFade: '淡出时长',
-            secPickZone: '选择区域', zoneNames: ['左区・音量', '中区・进度', '右区・速度'],
+            secPickZone: '选择区域', zoneNames: ['左侧区', '中间区', '右侧区'], zoneNameLabel: '名称',
             geomNote: '拖拽区块间的分隔线即可调整区域宽度。',
             ovl: { mute: '静音', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '快进 {v} 秒', back: '快退 {v} 秒', pp: '播放/暂停', spdSet: '倍速 {v}x', spdUp: '倍速 +{v}x', spdDown: '倍速 -{v}x' },
             triggers: { left_click: '左键', right_click: '右键', middle_click: '中键', wheel_up: '滚轮 ↑', wheel_down: '滚轮 ↓' },
@@ -1016,7 +1048,7 @@
             zoneKey: 'ゾーン表示ホットキー', zoneKeyDesc: 'プレイヤー上に3ゾーンと操作の対応を表示します。', panelKey: '設定パネルホットキー', pressKey: 'キーを押してください…', notSet: '未設定',
             theme: '外観', themeAuto: '自動', themeLight: 'ライト', themeDark: 'ダーク',
             secOsd: 'OSD 表示', osdSize: '文字サイズ', osdDuration: '表示時間', osdFade: 'フェードアウト時間',
-            secPickZone: 'ゾーン選択', zoneNames: ['左・音量', '中央・シーク', '右・速度'],
+            secPickZone: 'ゾーン選択', zoneNames: ['左ゾーン', '中央ゾーン', '右ゾーン'], zoneNameLabel: '名前',
             geomNote: 'ゾーン間の仕切りをドラッグして幅を調整できます。',
             ovl: { mute: 'ミュート', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '{v}秒送り', back: '{v}秒戻し', pp: '再生/一時停止', spdSet: '速度 {v}x', spdUp: '速度 +{v}x', spdDown: '速度 -{v}x' },
             triggers: { left_click: '左クリック', right_click: '右クリック', middle_click: '中クリック', wheel_up: 'ホイール ↑', wheel_down: 'ホイール ↓' },
@@ -1036,7 +1068,7 @@
             zoneKey: '존 표시 단축키', zoneKeyDesc: '플레이어에 3개 존과 동작 대응을 표시합니다.', panelKey: '설정 패널 단축키', pressKey: '키를 누르세요…', notSet: '설정 안 함',
             theme: '모양', themeAuto: '자동', themeLight: '라이트', themeDark: '다크',
             secOsd: 'OSD 표시', osdSize: '글자 크기', osdDuration: '표시 시간', osdFade: '페이드아웃 시간',
-            secPickZone: '존 선택', zoneNames: ['왼쪽・볼륨', '가운데・탐색', '오른쪽・속도'],
+            secPickZone: '존 선택', zoneNames: ['왼쪽 존', '가운데 존', '오른쪽 존'], zoneNameLabel: '이름',
             geomNote: '존 사이의 구분선을 드래그해 너비를 조정할 수 있습니다.',
             ovl: { mute: '음소거', volSet: '볼륨 {v}%', volUp: '볼륨 +{v}%', volDown: '볼륨 -{v}%', fwd: '{v}초 앞으로', back: '{v}초 뒤로', pp: '재생/일시정지', spdSet: '배속 {v}x', spdUp: '배속 +{v}x', spdDown: '배속 -{v}x' },
             triggers: { left_click: '좌클릭', right_click: '우클릭', middle_click: '휠클릭', wheel_up: '휠 ↑', wheel_down: '휠 ↓' },
@@ -1056,7 +1088,7 @@
             zoneKey: 'Atalho de exibição de zonas', zoneKeyDesc: 'Mostra as três zonas e suas ações no player.', panelKey: 'Atalho do painel de configurações', pressKey: 'Pressione uma tecla…', notSet: 'Não definido',
             theme: 'Aparência', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Escuro',
             secOsd: 'OSD', osdSize: 'Tamanho do texto', osdDuration: 'Tempo de exibição', osdFade: 'Tempo de esmaecimento',
-            secPickZone: 'Zonas', zoneNames: ['Esquerda · Volume', 'Centro · Busca', 'Direita · Velocidade'],
+            secPickZone: 'Zonas', zoneNames: ['Zona esquerda', 'Zona central', 'Zona direita'], zoneNameLabel: 'Nome',
             geomNote: 'Arraste os divisores entre as zonas para redimensioná-las.',
             ovl: { mute: 'Mudo', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avançar {v}s', back: 'Voltar {v}s', pp: 'Tocar/Pausar', spdSet: 'Vel {v}x', spdUp: 'Vel +{v}x', spdDown: 'Vel -{v}x' },
             triggers: { left_click: 'Clique esquerdo', right_click: 'Clique direito', middle_click: 'Clique do meio', wheel_up: 'Roda ↑', wheel_down: 'Roda ↓' },
@@ -1076,7 +1108,7 @@
             zoneKey: 'Atajo de visualización de zonas', zoneKeyDesc: 'Muestra las tres zonas y sus acciones en el reproductor.', panelKey: 'Atajo del panel de configuración', pressKey: 'Pulsa una tecla…', notSet: 'Sin asignar',
             theme: 'Apariencia', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Oscuro',
             secOsd: 'OSD', osdSize: 'Tamaño del texto', osdDuration: 'Tiempo en pantalla', osdFade: 'Tiempo de desvanecimiento',
-            secPickZone: 'Zonas', zoneNames: ['Izquierda · Volumen', 'Centro · Búsqueda', 'Derecha · Velocidad'],
+            secPickZone: 'Zonas', zoneNames: ['Zona izquierda', 'Zona central', 'Zona derecha'], zoneNameLabel: 'Nombre',
             geomNote: 'Arrastra los divisores entre las zonas para cambiar su tamaño.',
             ovl: { mute: 'Silencio', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avanzar {v}s', back: 'Retroceder {v}s', pp: 'Reproducir/Pausa', spdSet: 'Vel {v}x', spdUp: 'Vel +{v}x', spdDown: 'Vel -{v}x' },
             triggers: { left_click: 'Clic izquierdo', right_click: 'Clic derecho', middle_click: 'Clic central', wheel_up: 'Rueda ↑', wheel_down: 'Rueda ↓' },
@@ -1244,7 +1276,7 @@
         .val { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; color: var(--text); background: var(--panel-2); border: 1px solid var(--hairline);
             border-radius: 6px; padding: 3px 8px; min-width: 62px; text-align: right; font-variant-numeric: tabular-nums; }
         .hints { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-3); width: 250px; margin: -6px 0 0 auto; padding-right: 72px; }
-        select, .keycap, input[type="number"] { background: var(--panel-2); border: 1px solid var(--hairline); color: var(--text); font: inherit; font-size: 13px; border-radius: 7px; padding: 6px 9px; }
+        select, .keycap, input[type="number"], input[type="text"] { background: var(--panel-2); border: 1px solid var(--hairline); color: var(--text); font: inherit; font-size: 13px; border-radius: 7px; padding: 6px 9px; }
         .keycap { font-family: ui-monospace, Menlo, Consolas, monospace; min-width: 58px; text-align: center; cursor: pointer; }
         input[type="number"] { width: 72px; font-family: ui-monospace, Menlo, Consolas, monospace; text-align: right; }
         .seg { display: flex; border: 1px solid var(--hairline); border-radius: 9px; overflow: hidden; }
@@ -1253,7 +1285,7 @@
         .zonebar { position: relative; display: flex; height: 88px; border-radius: 10px; overflow: hidden; border: 1px solid var(--hairline); margin: 4px 0; }
         .zonebar button { border: none; cursor: pointer; font: inherit; color: var(--zone-label); padding: 10px;
             display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 1px; transition: filter 0.12s; }
-        .zonebar button .zn { font-weight: 600; font-size: 13px; }
+        .zonebar button .zn { font-weight: 600; font-size: 13px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .zonebar button .zw { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; opacity: 0.75; }
         .zonebar button:hover { filter: brightness(1.15); }
         .zonebar button.sel { box-shadow: inset 0 0 0 2px var(--accent); filter: brightness(1.1); }
@@ -1268,6 +1300,7 @@
         .arow:last-child { border-bottom: none; }
         .arow .ic { width: 76px; flex-shrink: 0; font-size: 12.5px; color: var(--text-2); }
         .arow select { flex: 1; }
+        .arow input[type="text"] { flex: 1; min-width: 0; }
         .arow .unit { font-size: 11.5px; color: var(--text-3); width: 24px; }
         .advbtn { background: none; border: none; color: var(--text-3); font: inherit; font-size: 12px; cursor: pointer; padding: 8px 2px; display: flex; align-items: center; gap: 6px; }
         .advbtn:hover { color: var(--text-2); }
@@ -1329,7 +1362,7 @@
     function captureState() {
         const settings = {};
         for (const k of EDITABLE_KEYS) settings[k] = SETTINGS[k];
-        return JSON.parse(JSON.stringify({ settings, zoneActions: CONFIG.map(z => z.mouse_action), zoneWidths: getZoneWidths(), theme: uiTheme }));
+        return JSON.parse(JSON.stringify({ settings, zoneActions: CONFIG.map(z => z.mouse_action), zoneWidths: getZoneWidths(), zoneNames: userZoneNames, theme: uiTheme }));
     }
 
     /**
@@ -1352,6 +1385,8 @@
             });
         }
         if (isValidZoneWidths(snap.zoneWidths)) setZoneWidths(snap.zoneWidths);
+        const zn = sanitizeZoneNames(snap.zoneNames);
+        if (zn) userZoneNames = zn;
         if (snap.theme === 'light' || snap.theme === 'dark' || snap.theme === 'auto') uiTheme = snap.theme;
         if (isZonesVisible) updateZoneVisuals();
     }
@@ -1465,7 +1500,17 @@
     function renderZoneRows() {
         const host = panelRefs.actionRows;
         host.textContent = '';
-        panelRefs.zoneTitle.textContent = T.zoneNames[selectedZone];
+        panelRefs.zoneTitle.textContent = zoneDisplayName(selectedZone);
+        const nameInput = h('input', { type: 'text', maxlength: '40', placeholder: T.zoneNames[selectedZone] });
+        nameInput.value = userZoneNames[selectedZone];
+        nameInput.addEventListener('change', () => {
+            userZoneNames[selectedZone] = nameInput.value.trim().slice(0, 40);
+            nameInput.value = userZoneNames[selectedZone];
+            panelRefs.zoneTitle.textContent = zoneDisplayName(selectedZone);
+            if (panelRefs.layoutZonebar) panelRefs.layoutZonebar();
+            if (isZonesVisible) updateZoneVisuals();
+        });
+        host.appendChild(h('div', { class: 'arow' }, h('span', { class: 'ic', text: T.zoneNameLabel }), nameInput));
         const ma = CONFIG[selectedZone].mouse_action;
         for (const trig of ['left_click', 'right_click', 'middle_click', 'wheel_up', 'wheel_down']) {
             const cur = ma[trig] || { action: 'none', value: null };
@@ -1557,6 +1602,7 @@
             let x = 0;
             zoneBtns.forEach((b, i) => {
                 b.style.width = `${widths[i]}%`;
+                b.querySelector('.zn').textContent = zoneDisplayName(i);
                 b.querySelector('.zw').textContent = `${Math.round(widths[i])}%`;
                 x += widths[i];
                 if (zoneHandles[i]) zoneHandles[i].style.left = `${x}%`;
@@ -1564,7 +1610,7 @@
         };
         CONFIG.forEach((zone, i) => {
             const b = h('button', {},
-                h('span', { class: 'zn', text: T.zoneNames[i] || zone.name }),
+                h('span', { class: 'zn' }),
                 h('span', { class: 'zw' }));
             b.style.background = zoneFills[i % zoneFills.length];
             if (i === selectedZone) b.classList.add('sel');
@@ -1612,6 +1658,7 @@
             zonebar.appendChild(handle);
         }
         layoutZonebar();
+        refs.layoutZonebar = layoutZonebar;
         refs.zoneTitle = h('h2', { text: '' });
         refs.actionRows = h('div');
         const paneZones = h('section', { class: 'pane' },
@@ -1677,7 +1724,7 @@
         importBtn.addEventListener('click', () => importInput.click());
         const resetBtn = h('button', { class: 'btn', text: T.btnReset });
         resetBtn.addEventListener('click', () => {
-            applyState({ settings: FACTORY.settings, zoneActions: FACTORY.zoneActions, zoneWidths: FACTORY.zoneWidths, theme: 'auto' });
+            applyState({ settings: FACTORY.settings, zoneActions: FACTORY.zoneActions, zoneWidths: FACTORY.zoneWidths, zoneNames: FACTORY.zoneNames, theme: 'auto' });
             try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
             syncPanelUI();
             showPanelToast(T.toastReset);
