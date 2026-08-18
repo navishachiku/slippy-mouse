@@ -675,24 +675,25 @@
             else if (type === 'wheel_down') icon = '🔽';
 
             // Action Mapping
+            const fmt = (tpl, v) => tpl.replace('{v}', v);
             switch (config.action) {
-                case 'volume_set': 
-                    label = config.value === 0 ? 'Mute' : `Vol ${config.value}%`; break;
-                case 'volume_up': label = `Vol +${config.value}%`; break;
-                case 'volume_down': label = `Vol -${config.value}%`; break;
-                case 'seek': 
-                    label = config.value > 0 ? `Forward ${config.value}s` : `Back ${Math.abs(config.value)}s`; break;
-                case 'toggle_play_pause': label = 'Play/Pause'; break;
-                case 'speed_set': label = `Speed ${config.value}x`; break;
-                case 'speed_up': label = `Speed +${config.value}`; break;
-                case 'speed_down': label = `Speed -${config.value}`; break;
+                case 'volume_set':
+                    label = config.value === 0 ? T.ovl.mute : fmt(T.ovl.volSet, config.value); break;
+                case 'volume_up': label = fmt(T.ovl.volUp, config.value); break;
+                case 'volume_down': label = fmt(T.ovl.volDown, config.value); break;
+                case 'seek':
+                    label = config.value > 0 ? fmt(T.ovl.fwd, config.value) : fmt(T.ovl.back, Math.abs(config.value)); break;
+                case 'toggle_play_pause': label = T.ovl.pp; break;
+                case 'speed_set': label = fmt(T.ovl.spdSet, config.value); break;
+                case 'speed_up': label = fmt(T.ovl.spdUp, config.value); break;
+                case 'speed_down': label = fmt(T.ovl.spdDown, config.value); break;
                 default: label = config.action;
             }
 
             return { icon, label };
         };
 
-        CONFIG.forEach(zone => {
+        CONFIG.forEach((zone, zi) => {
             const visual = document.createElement('div');
             visual.className = 'ytm-debug-zone';
             Object.assign(visual.style, {
@@ -731,7 +732,7 @@
 
             // Title
             const title = document.createElement('div');
-            title.textContent = zone.name;
+            title.textContent = T.zoneNames[zi] || zone.name;
             Object.assign(title.style, {
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -969,6 +970,7 @@
             secOsd: 'OSD', osdSize: 'Text size', osdDuration: 'Display time', osdFade: 'Fade-out time',
             secPickZone: 'Zones', zoneNames: ['Left · Volume', 'Middle · Seek', 'Right · Speed'],
             geomNote: 'Drag the dividers between zones to resize them.',
+            ovl: { mute: 'Mute', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Forward {v}s', back: 'Back {v}s', pp: 'Play/Pause', spdSet: 'Speed {v}x', spdUp: 'Speed +{v}x', spdDown: 'Speed -{v}x' },
             triggers: { left_click: 'Left click', right_click: 'Right click', middle_click: 'Middle click', wheel_up: 'Wheel ↑', wheel_down: 'Wheel ↓' },
             actions: { none: 'Do nothing (native)', volume_set: 'Set volume', volume_up: 'Volume up', volume_down: 'Volume down', seek: 'Seek', toggle_play_pause: 'Play / Pause', speed_set: 'Set speed', speed_up: 'Speed up', speed_down: 'Speed down' },
             secTuning: 'Adaptive tuning', step: 'Trigger step', stepDesc: 'Scroll travel needed per action. Lower is finer, higher is steadier.', hintFine: 'Fine', hintSteady: 'Steady',
@@ -988,6 +990,7 @@
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留時間', osdFade: '淡出時長',
             secPickZone: '選擇區域', zoneNames: ['左區・音量', '中區・進度', '右區・速度'],
             geomNote: '拖曳區塊間的分隔線即可調整區域寬度。',
+            ovl: { mute: '靜音', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '快進 {v} 秒', back: '快退 {v} 秒', pp: '播放/暫停', spdSet: '倍速 {v}x', spdUp: '倍速 +{v}x', spdDown: '倍速 -{v}x' },
             triggers: { left_click: '左鍵', right_click: '右鍵', middle_click: '中鍵', wheel_up: '滾輪 ↑', wheel_down: '滾輪 ↓' },
             actions: { none: '無（放行原生行為）', volume_set: '設定音量', volume_up: '音量增加', volume_down: '音量減少', seek: '快進 / 快退', toggle_play_pause: '播放 / 暫停', speed_set: '設定倍速', speed_up: '倍速增加', speed_down: '倍速減少' },
             secTuning: '自適應調校', step: '觸發步距', stepDesc: '每次動作所需的累積滾動量。調低更靈敏，調高更穩重。', hintFine: '靈敏', hintSteady: '穩重',
@@ -1007,6 +1010,7 @@
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留时间', osdFade: '淡出时长',
             secPickZone: '选择区域', zoneNames: ['左区・音量', '中区・进度', '右区・速度'],
             geomNote: '拖拽区块间的分隔线即可调整区域宽度。',
+            ovl: { mute: '静音', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '快进 {v} 秒', back: '快退 {v} 秒', pp: '播放/暂停', spdSet: '倍速 {v}x', spdUp: '倍速 +{v}x', spdDown: '倍速 -{v}x' },
             triggers: { left_click: '左键', right_click: '右键', middle_click: '中键', wheel_up: '滚轮 ↑', wheel_down: '滚轮 ↓' },
             actions: { none: '无（放行原生行为）', volume_set: '设置音量', volume_up: '音量增加', volume_down: '音量减少', seek: '快进 / 快退', toggle_play_pause: '播放 / 暂停', speed_set: '设置倍速', speed_up: '倍速增加', speed_down: '倍速减少' },
             secTuning: '自适应调校', step: '触发步距', stepDesc: '每次动作所需的累积滚动量。调低更灵敏，调高更稳重。', hintFine: '灵敏', hintSteady: '稳重',
@@ -1026,6 +1030,7 @@
             secOsd: 'OSD 表示', osdSize: '文字サイズ', osdDuration: '表示時間', osdFade: 'フェードアウト時間',
             secPickZone: 'ゾーン選択', zoneNames: ['左・音量', '中央・シーク', '右・速度'],
             geomNote: 'ゾーン間の仕切りをドラッグして幅を調整できます。',
+            ovl: { mute: 'ミュート', volSet: '音量 {v}%', volUp: '音量 +{v}%', volDown: '音量 -{v}%', fwd: '{v}秒送り', back: '{v}秒戻し', pp: '再生/一時停止', spdSet: '速度 {v}x', spdUp: '速度 +{v}x', spdDown: '速度 -{v}x' },
             triggers: { left_click: '左クリック', right_click: '右クリック', middle_click: '中クリック', wheel_up: 'ホイール ↑', wheel_down: 'ホイール ↓' },
             actions: { none: '何もしない（ネイティブ）', volume_set: '音量を設定', volume_up: '音量を上げる', volume_down: '音量を下げる', seek: 'シーク', toggle_play_pause: '再生 / 一時停止', speed_set: '速度を設定', speed_up: '速度を上げる', speed_down: '速度を下げる' },
             secTuning: 'アダプティブ調整', step: 'トリガーステップ', stepDesc: '1アクションに必要な累積スクロール量。低いほど敏感、高いほど安定。', hintFine: '敏感', hintSteady: '安定',
@@ -1045,6 +1050,7 @@
             secOsd: 'OSD 표시', osdSize: '글자 크기', osdDuration: '표시 시간', osdFade: '페이드아웃 시간',
             secPickZone: '존 선택', zoneNames: ['왼쪽・볼륨', '가운데・탐색', '오른쪽・속도'],
             geomNote: '존 사이의 구분선을 드래그해 너비를 조정할 수 있습니다.',
+            ovl: { mute: '음소거', volSet: '볼륨 {v}%', volUp: '볼륨 +{v}%', volDown: '볼륨 -{v}%', fwd: '{v}초 앞으로', back: '{v}초 뒤로', pp: '재생/일시정지', spdSet: '배속 {v}x', spdUp: '배속 +{v}x', spdDown: '배속 -{v}x' },
             triggers: { left_click: '좌클릭', right_click: '우클릭', middle_click: '휠클릭', wheel_up: '휠 ↑', wheel_down: '휠 ↓' },
             actions: { none: '없음（네이티브）', volume_set: '볼륨 설정', volume_up: '볼륨 올리기', volume_down: '볼륨 내리기', seek: '탐색', toggle_play_pause: '재생 / 일시정지', speed_set: '속도 설정', speed_up: '속도 올리기', speed_down: '속도 내리기' },
             secTuning: '적응형 조정', step: '트리거 스텝', stepDesc: '동작 한 번에 필요한 누적 스크롤 양. 낮을수록 민감, 높을수록 안정적.', hintFine: '민감', hintSteady: '안정',
@@ -1064,6 +1070,7 @@
             secOsd: 'OSD', osdSize: 'Tamanho do texto', osdDuration: 'Tempo de exibição', osdFade: 'Tempo de esmaecimento',
             secPickZone: 'Zonas', zoneNames: ['Esquerda · Volume', 'Centro · Busca', 'Direita · Velocidade'],
             geomNote: 'Arraste os divisores entre as zonas para redimensioná-las.',
+            ovl: { mute: 'Mudo', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avançar {v}s', back: 'Voltar {v}s', pp: 'Tocar/Pausar', spdSet: 'Vel {v}x', spdUp: 'Vel +{v}x', spdDown: 'Vel -{v}x' },
             triggers: { left_click: 'Clique esquerdo', right_click: 'Clique direito', middle_click: 'Clique do meio', wheel_up: 'Roda ↑', wheel_down: 'Roda ↓' },
             actions: { none: 'Nada (nativo)', volume_set: 'Definir volume', volume_up: 'Aumentar volume', volume_down: 'Diminuir volume', seek: 'Avançar / Voltar', toggle_play_pause: 'Reproduzir / Pausar', speed_set: 'Definir velocidade', speed_up: 'Aumentar velocidade', speed_down: 'Diminuir velocidade' },
             secTuning: 'Ajuste adaptativo', step: 'Passo de acionamento', stepDesc: 'Rolagem acumulada necessária por ação. Menor é mais fino, maior é mais estável.', hintFine: 'Fino', hintSteady: 'Estável',
@@ -1083,6 +1090,7 @@
             secOsd: 'OSD', osdSize: 'Tamaño del texto', osdDuration: 'Tiempo en pantalla', osdFade: 'Tiempo de desvanecimiento',
             secPickZone: 'Zonas', zoneNames: ['Izquierda · Volumen', 'Centro · Búsqueda', 'Derecha · Velocidad'],
             geomNote: 'Arrastra los divisores entre las zonas para cambiar su tamaño.',
+            ovl: { mute: 'Silencio', volSet: 'Vol {v}%', volUp: 'Vol +{v}%', volDown: 'Vol -{v}%', fwd: 'Avanzar {v}s', back: 'Retroceder {v}s', pp: 'Reproducir/Pausa', spdSet: 'Vel {v}x', spdUp: 'Vel +{v}x', spdDown: 'Vel -{v}x' },
             triggers: { left_click: 'Clic izquierdo', right_click: 'Clic derecho', middle_click: 'Clic central', wheel_up: 'Rueda ↑', wheel_down: 'Rueda ↓' },
             actions: { none: 'Nada (nativo)', volume_set: 'Fijar volumen', volume_up: 'Subir volumen', volume_down: 'Bajar volumen', seek: 'Avanzar / Retroceder', toggle_play_pause: 'Reproducir / Pausar', speed_set: 'Fijar velocidad', speed_up: 'Subir velocidad', speed_down: 'Bajar velocidad' },
             secTuning: 'Ajuste adaptativo', step: 'Paso de activación', stepDesc: 'Desplazamiento acumulado necesario por acción. Menor es más fino, mayor es más estable.', hintFine: 'Fino', hintSteady: 'Estable',
