@@ -932,6 +932,7 @@
     ];
 
     let uiTheme = 'auto'; // 'auto' | 'light' | 'dark'
+    let uiLang = 'auto';  // 'auto' follows the browser; otherwise an I18N locale key
 
     /**
      * Merge stored overrides from localStorage into SETTINGS and CONFIG.
@@ -965,6 +966,7 @@
             const zn = sanitizeZoneNames(data.zoneNames);
             if (zn) userZoneNames = zn;
             if (data.theme === 'light' || data.theme === 'dark') uiTheme = data.theme;
+            if (typeof data.lang === 'string') uiLang = data.lang;
         } catch (e) {
             log('Failed to parse stored settings:', e);
         }
@@ -982,7 +984,8 @@
                 zoneActions: CONFIG.map(z => z.mouse_action),
                 zoneWidths: getZoneWidths(),
                 zoneNames: userZoneNames,
-                theme: uiTheme
+                theme: uiTheme,
+                lang: uiLang
             }));
         } catch (e) {
             log('Failed to persist settings:', e);
@@ -998,7 +1001,7 @@
             title: 'Slippy Mouse Settings', tabGeneral: 'General', tabZones: 'Zone Actions', tabWheel: 'Wheel', tabAdvanced: 'Advanced',
             secCore: 'Core', adaptive: 'Adaptive wheel', adaptiveDesc: 'One notch or swipe equals exactly one action on any device. Turn off to use manual filtering in the Wheel tab.',
             zoneKey: 'Zone overlay hotkey', zoneKeyDesc: 'Shows the three zones and their actions on the player.', panelKey: 'Settings panel hotkey', pressKey: 'Press a key…', notSet: 'Not set',
-            theme: 'Appearance', themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark',
+            theme: 'Appearance', language: 'Language', themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark',
             secOsd: 'OSD', osdSize: 'Text size', osdDuration: 'Display time', osdFade: 'Fade-out time',
             secPickZone: 'Zones', zoneNames: ['Left zone', 'Middle zone', 'Right zone'], zoneNameLabel: 'Name',
             geomNote: 'Drag the dividers between zones to resize them.',
@@ -1018,7 +1021,7 @@
             title: 'Slippy Mouse 設定', tabGeneral: '一般', tabZones: '區域動作', tabWheel: '滾輪', tabAdvanced: '進階',
             secCore: '核心', adaptive: '自適應滾輪', adaptiveDesc: '任何裝置上一格滾輪或一次滑動＝恰好一次動作。關閉後改用「滾輪」分頁的手動過濾。',
             zoneKey: '區域顯示熱鍵', zoneKeyDesc: '在播放器上顯示三區範圍與動作對照。', panelKey: '設定面板熱鍵', pressKey: '請按任意鍵…', notSet: '未設定',
-            theme: '外觀', themeAuto: '自動', themeLight: '淺色', themeDark: '深色',
+            theme: '外觀', language: '介面語言', themeAuto: '自動', themeLight: '淺色', themeDark: '深色',
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留時間', osdFade: '淡出時長',
             secPickZone: '選擇區域', zoneNames: ['左側區', '中間區', '右側區'], zoneNameLabel: '名稱',
             geomNote: '拖曳區塊間的分隔線即可調整區域寬度。',
@@ -1038,7 +1041,7 @@
             title: 'Slippy Mouse 设置', tabGeneral: '常规', tabZones: '区域动作', tabWheel: '滚轮', tabAdvanced: '高级',
             secCore: '核心', adaptive: '自适应滚轮', adaptiveDesc: '任何设备上一格滚轮或一次滑动＝恰好一次动作。关闭后改用“滚轮”选项卡的手动过滤。',
             zoneKey: '区域显示热键', zoneKeyDesc: '在播放器上显示三区范围与动作对照。', panelKey: '设置面板热键', pressKey: '请按任意键…', notSet: '未设置',
-            theme: '外观', themeAuto: '自动', themeLight: '浅色', themeDark: '深色',
+            theme: '外观', language: '界面语言', themeAuto: '自动', themeLight: '浅色', themeDark: '深色',
             secOsd: 'OSD 提示', osdSize: '文字大小', osdDuration: '停留时间', osdFade: '淡出时长',
             secPickZone: '选择区域', zoneNames: ['左侧区', '中间区', '右侧区'], zoneNameLabel: '名称',
             geomNote: '拖拽区块间的分隔线即可调整区域宽度。',
@@ -1058,7 +1061,7 @@
             title: 'Slippy Mouse 設定', tabGeneral: '一般', tabZones: 'ゾーン操作', tabWheel: 'ホイール', tabAdvanced: '詳細',
             secCore: 'コア', adaptive: 'アダプティブホイール', adaptiveDesc: 'どのデバイスでもノッチ1回・スワイプ1回＝ちょうど1アクション。オフにすると「ホイール」タブの手動フィルタリングを使用します。',
             zoneKey: 'ゾーン表示ホットキー', zoneKeyDesc: 'プレイヤー上に3ゾーンと操作の対応を表示します。', panelKey: '設定パネルホットキー', pressKey: 'キーを押してください…', notSet: '未設定',
-            theme: '外観', themeAuto: '自動', themeLight: 'ライト', themeDark: 'ダーク',
+            theme: '外観', language: '表示言語', themeAuto: '自動', themeLight: 'ライト', themeDark: 'ダーク',
             secOsd: 'OSD 表示', osdSize: '文字サイズ', osdDuration: '表示時間', osdFade: 'フェードアウト時間',
             secPickZone: 'ゾーン選択', zoneNames: ['左ゾーン', '中央ゾーン', '右ゾーン'], zoneNameLabel: '名前',
             geomNote: 'ゾーン間の仕切りをドラッグして幅を調整できます。',
@@ -1078,7 +1081,7 @@
             title: 'Slippy Mouse 설정', tabGeneral: '일반', tabZones: '존 동작', tabWheel: '휠', tabAdvanced: '고급',
             secCore: '핵심', adaptive: '적응형 휠', adaptiveDesc: '어떤 장치에서든 한 칸/한 스와이프＝정확히 한 번의 동작. 끄면 "휠" 탭의 수동 필터링을 사용합니다.',
             zoneKey: '존 표시 단축키', zoneKeyDesc: '플레이어에 3개 존과 동작 대응을 표시합니다.', panelKey: '설정 패널 단축키', pressKey: '키를 누르세요…', notSet: '설정 안 함',
-            theme: '모양', themeAuto: '자동', themeLight: '라이트', themeDark: '다크',
+            theme: '모양', language: '표시 언어', themeAuto: '자동', themeLight: '라이트', themeDark: '다크',
             secOsd: 'OSD 표시', osdSize: '글자 크기', osdDuration: '표시 시간', osdFade: '페이드아웃 시간',
             secPickZone: '존 선택', zoneNames: ['왼쪽 존', '가운데 존', '오른쪽 존'], zoneNameLabel: '이름',
             geomNote: '존 사이의 구분선을 드래그해 너비를 조정할 수 있습니다.',
@@ -1098,7 +1101,7 @@
             title: 'Configurações do Slippy Mouse', tabGeneral: 'Geral', tabZones: 'Ações de Zona', tabWheel: 'Roda', tabAdvanced: 'Avançado',
             secCore: 'Essencial', adaptive: 'Roda adaptativa', adaptiveDesc: 'Um clique ou deslize equivale exatamente a uma ação em qualquer dispositivo. Desative para usar a filtragem manual na aba Roda.',
             zoneKey: 'Atalho de exibição de zonas', zoneKeyDesc: 'Mostra as três zonas e suas ações no player.', panelKey: 'Atalho do painel de configurações', pressKey: 'Pressione uma tecla…', notSet: 'Não definido',
-            theme: 'Aparência', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Escuro',
+            theme: 'Aparência', language: 'Idioma', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Escuro',
             secOsd: 'OSD', osdSize: 'Tamanho do texto', osdDuration: 'Tempo de exibição', osdFade: 'Tempo de esmaecimento',
             secPickZone: 'Zonas', zoneNames: ['Zona esquerda', 'Zona central', 'Zona direita'], zoneNameLabel: 'Nome',
             geomNote: 'Arraste os divisores entre as zonas para redimensioná-las.',
@@ -1118,7 +1121,7 @@
             title: 'Configuración de Slippy Mouse', tabGeneral: 'General', tabZones: 'Acciones de Zona', tabWheel: 'Rueda', tabAdvanced: 'Avanzado',
             secCore: 'Esencial', adaptive: 'Rueda adaptativa', adaptiveDesc: 'Un clic o deslizamiento equivale exactamente a una acción en cualquier dispositivo. Desactívala para usar el filtrado manual en la pestaña Rueda.',
             zoneKey: 'Atajo de visualización de zonas', zoneKeyDesc: 'Muestra las tres zonas y sus acciones en el reproductor.', panelKey: 'Atajo del panel de configuración', pressKey: 'Pulsa una tecla…', notSet: 'Sin asignar',
-            theme: 'Apariencia', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Oscuro',
+            theme: 'Apariencia', language: 'Idioma', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Oscuro',
             secOsd: 'OSD', osdSize: 'Tamaño del texto', osdDuration: 'Tiempo en pantalla', osdFade: 'Tiempo de desvanecimiento',
             secPickZone: 'Zonas', zoneNames: ['Zona izquierda', 'Zona central', 'Zona derecha'], zoneNameLabel: 'Nombre',
             geomNote: 'Arrastra los divisores entre las zonas para cambiar su tamaño.',
@@ -1155,7 +1158,16 @@
         return 'en';
     }
 
-    const T = I18N[pickLocale()];
+    /**
+     * Resolve the active locale key: manual override first, then browser.
+     *
+     * @returns {string} An I18N key.
+     */
+    function resolveLocale() {
+        return uiLang !== 'auto' && I18N[uiLang] ? uiLang : pickLocale();
+    }
+
+    let T = I18N[resolveLocale()];
 
     // =====================[ Hotkeys ]=====================
 
@@ -1373,7 +1385,7 @@
     function captureState() {
         const settings = {};
         for (const k of EDITABLE_KEYS) settings[k] = SETTINGS[k];
-        return JSON.parse(JSON.stringify({ settings, zoneActions: CONFIG.map(z => z.mouse_action), zoneWidths: getZoneWidths(), zoneNames: userZoneNames, theme: uiTheme }));
+        return JSON.parse(JSON.stringify({ settings, zoneActions: CONFIG.map(z => z.mouse_action), zoneWidths: getZoneWidths(), zoneNames: userZoneNames, theme: uiTheme, lang: uiLang }));
     }
 
     /**
@@ -1399,6 +1411,10 @@
         const zn = sanitizeZoneNames(snap.zoneNames);
         if (zn) userZoneNames = zn;
         if (snap.theme === 'light' || snap.theme === 'dark' || snap.theme === 'auto') uiTheme = snap.theme;
+        if (typeof snap.lang === 'string') {
+            uiLang = snap.lang === 'auto' || I18N[snap.lang] ? snap.lang : 'auto';
+            T = I18N[resolveLocale()];
+        }
         if (isZonesVisible) updateZoneVisuals();
     }
 
@@ -1590,12 +1606,25 @@
             themeSeg.appendChild(b);
         });
         refs.themeSeg = themeSeg;
+        const langSel = h('select');
+        [['auto', T.themeAuto], ['en', 'English'], ['zh-TW', '繁體中文'], ['zh-CN', '简体中文'],
+         ['ja', '日本語'], ['ko', '한국어'], ['pt', 'Português'], ['es', 'Español']].forEach(([v, lbl]) => {
+            const o = h('option', { value: v, text: lbl });
+            if (uiLang === v) o.selected = true;
+            langSel.appendChild(o);
+        });
+        langSel.addEventListener('change', () => {
+            uiLang = langSel.value;
+            T = I18N[resolveLocale()];
+            syncPanelUI();
+        });
         const paneGeneral = h('section', { class: 'pane on' },
             h('h2', { text: T.secCore }),
             adaptiveRow,
             rowKeycap(T.zoneKey, T.zoneKeyDesc, 'ZONE_TOGGLE_KEY', () => SETTINGS.ZONE_TOGGLE_KEY, v => { SETTINGS.ZONE_TOGGLE_KEY = v; }),
             rowKeycap(T.panelKey, null, 'SETTINGS_TOGGLE_KEY', () => SETTINGS.SETTINGS_TOGGLE_KEY, v => { SETTINGS.SETTINGS_TOGGLE_KEY = v; }),
             h('div', { class: 'row' }, h('div', { class: 'info' }, h('div', { class: 'label', text: T.theme })), themeSeg),
+            h('div', { class: 'row' }, h('div', { class: 'info' }, h('div', { class: 'label', text: T.language })), langSel),
             h('h2', { text: T.secOsd }),
             rowSlider(T.osdSize, null, 'OSD_FONT_SIZE', { min: 16, max: 48, unit: 'px' },
                 () => parseInt(SETTINGS.OSD_FONT_SIZE, 10) || 28, v => { SETTINGS.OSD_FONT_SIZE = `${v}px`; }),
@@ -1713,7 +1742,7 @@
                 try {
                     const data = JSON.parse(reader.result);
                     if (!data || typeof data !== 'object' || !data.settings) throw new Error('bad shape');
-                    applyState({ settings: data.settings, zoneActions: data.zoneActions, theme: data.theme });
+                    applyState(data);
                     persistSettings();
                     syncPanelUI();
                     showPanelToast(T.toastImported);
@@ -1735,7 +1764,7 @@
         importBtn.addEventListener('click', () => importInput.click());
         const resetBtn = h('button', { class: 'btn', text: T.btnReset });
         resetBtn.addEventListener('click', () => {
-            applyState({ settings: FACTORY.settings, zoneActions: FACTORY.zoneActions, zoneWidths: FACTORY.zoneWidths, zoneNames: FACTORY.zoneNames, theme: 'auto' });
+            applyState({ settings: FACTORY.settings, zoneActions: FACTORY.zoneActions, zoneWidths: FACTORY.zoneWidths, zoneNames: FACTORY.zoneNames, theme: 'auto', lang: 'auto' });
             try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
             syncPanelUI();
             showPanelToast(T.toastReset);
