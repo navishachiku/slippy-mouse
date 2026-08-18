@@ -2,7 +2,7 @@
 
 ![Slippy Mouse](./docs/images/banner.png)
 
-[English](./README.md) | [繁體中文](./docs/zh-tc.md) | [简体中文](./docs/zh-sc.md) | [日本語](./docs/jp.md) | [Español](./docs/es.md) | [한국어](./docs/ko.md) | [Português](./docs/pt.md) | [Français](./docs/fr.md) | [Deutsch](./docs/de.md) | [Italiano](./docs/it.md) | [Русский](./docs/ru.md) | [ไทย](./docs/th.md) | [Tiếng Việt](./docs/vi.md)
+[English](./README.md) | [简体中文](./docs/zh-sc.md) | [繁體中文](./docs/zh-tc.md) | [Español](./docs/es.md) | [Português](./docs/pt.md) | [Русский](./docs/ru.md) | [日本語](./docs/jp.md) | [Français](./docs/fr.md) | [Deutsch](./docs/de.md) | [Tiếng Việt](./docs/vi.md) | [한국어](./docs/ko.md) | [ไทย](./docs/th.md) | [Italiano](./docs/it.md)
 
 [![Install on GreasyFork](https://img.shields.io/badge/Install%20on-GreasyFork-brightgreen?style=for-the-badge&logo=greasyfork)](https://greasyfork.org/scripts/566499)
 

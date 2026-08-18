@@ -1727,9 +1727,9 @@
         });
         refs.themeSeg = themeSeg;
         const langSel = h('select');
-        [['auto', T.themeAuto], ['en', 'English'], ['zh-TW', '繁體中文'], ['zh-CN', '简体中文'],
-         ['ja', '日本語'], ['ko', '한국어'], ['pt', 'Português'], ['es', 'Español'], ['fr', 'Français'],
-         ['de', 'Deutsch'], ['it', 'Italiano'], ['ru', 'Русский'], ['th', 'ไทย'], ['vi', 'Tiếng Việt']].forEach(([v, lbl]) => {
+        [['auto', T.themeAuto], ['en', 'English'], ['zh-CN', '简体中文'], ['zh-TW', '繁體中文'],
+         ['es', 'Español'], ['pt', 'Português'], ['ru', 'Русский'], ['ja', '日本語'], ['fr', 'Français'],
+         ['de', 'Deutsch'], ['vi', 'Tiếng Việt'], ['ko', '한국어'], ['th', 'ไทย'], ['it', 'Italiano']].forEach(([v, lbl]) => {
             const o = h('option', { value: v, text: lbl });
             if (uiLang === v) o.selected = true;
             langSel.appendChild(o);
