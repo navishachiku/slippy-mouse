@@ -108,7 +108,7 @@
 
 **방법 2: 브라우저 확장 버전**
 
-Microsoft Edge Add-ons 등록 준비 중입니다. 이 repo의 `extension/` 디렉터리를 내려받아 브라우저 확장 페이지에서 개발자 모드를 켜고 수동으로 로드할 수도 있습니다.
+**[Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/mkheoimiiokaclpjjlfokkkkdlfbhhib)**에서 설치할 수 있습니다. 이 repo의 `extension/` 디렉터리를 내려받아 브라우저 확장 페이지에서 개발자 모드를 켜고 수동으로 로드할 수도 있습니다.
 
 **방법 3: Userscript 수동 설치**
 

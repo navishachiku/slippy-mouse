@@ -108,7 +108,7 @@ Em `mouse_action`, os tipos de `action` que você pode usar são:
 
 **Método 2: Versão extensão de navegador**
 
-A listagem na Microsoft Edge Add-ons está em preparação. Você também pode baixar o diretório `extension/` deste repo e carregá-lo manualmente na página de extensões do navegador com o Modo de desenvolvedor ativado.
+Instale pela **[Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/mkheoimiiokaclpjjlfokkkkdlfbhhib)**. Você também pode baixar o diretório `extension/` deste repo e carregá-lo manualmente na página de extensões do navegador com o Modo de desenvolvedor ativado.
 
 **Método 3: Instalação manual do Userscript**
 

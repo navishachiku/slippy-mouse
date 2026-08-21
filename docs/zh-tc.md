@@ -108,7 +108,7 @@
 
 **方法二：瀏覽器擴充版**
 
-Microsoft Edge Add-ons 上架準備中；也可下載本 repo 的 `extension/` 目錄後，在瀏覽器的擴充功能頁開啟開發人員模式手動載入。
+已上架 **[Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/mkheoimiiokaclpjjlfokkkkdlfbhhib)**，可一鍵安裝；也可下載本 repo 的 `extension/` 目錄後，在瀏覽器的擴充功能頁開啟開發人員模式手動載入。
 
 **方法三：手動安裝 Userscript**
 

@@ -108,7 +108,7 @@
 
 **方法2：ブラウザ拡張機能版**
 
-Microsoft Edge Add-ons は公開準備中です。本リポジトリの `extension/` ディレクトリをダウンロードし、ブラウザの拡張機能ページでデベロッパーモードを有効にして手動で読み込むこともできます。
+**[Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/mkheoimiiokaclpjjlfokkkkdlfbhhib)** で公開中です。本リポジトリの `extension/` ディレクトリをダウンロードし、ブラウザの拡張機能ページでデベロッパーモードを有効にして手動で読み込むこともできます。
 
 **方法3：Userscript 手動インストール**
 
